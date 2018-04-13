@@ -1,10 +1,10 @@
 import unittest
 import os
-
 from icx.wallet.wallet import Wallet
 from icx.custom_error import FilePathIsWrong, PasswordIsNotAcceptable, NoPermissionToWriteFile, FileExists, NotAKeyStoreFile
 from icx.utils import validate_key_store_file
-TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+
+TEST_DIR = os.path.dirname(os.path.abspath("tests/keystore_file/test_keystore.txt"))
 
 
 class TestCreateWalletAndKeystoreFile(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
     def test0(self):
         """ Case when created wallet successfully.
         """
-        # Given
+        # Givenz
         password = "Adas21312**"
         file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 

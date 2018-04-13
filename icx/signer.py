@@ -31,21 +31,21 @@ class IcxSigner(object):
         return hashlib.sha3_256(public_key_bytes[1:]).digest()[-20:]
 
     def sign(self, msg_hash):
-        """Make a signature using the hash value of msg.
+        """ Make a signature using the hash value of msg.
 
         :param msg_hash: Result of sha3_256(msg) type(bytes)
-        :return:
-        Signature. type(bytes)
+
+        :return: Signature. type(bytes)
         """
         private_key_object = self.__private_key
         signature = private_key_object.ecdsa_sign(msg_hash, raw=True)
         return private_key_object.ecdsa_serialize(signature)
 
     def sign_recoverable(self, msg_hash):
-        """Make a recoverable signature using message hash data.
-        We can extract public key from recoverable signature.
+        """ Make a recoverable signature using message hash data. We can extract public key from recoverable signature.
 
         :param msg_hash: Hash data of message. type(bytes)
+
         :return:
         type(tuple)
         type(bytes): 65 bytes data , type(int): recovery id

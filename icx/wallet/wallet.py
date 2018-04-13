@@ -1,9 +1,9 @@
 import json
-from eth_keyfile import create_keyfile_json, extract_key_from_keyfile, load_keyfile, decode_keyfile_json
+from eth_keyfile import create_keyfile_json, decode_keyfile_json
 from icx.custom_error import PasswordIsNotAcceptable, FileExists, NoPermissionToWriteFile, FilePathIsWrong, \
     FilePathWithoutFileName, PasswordIsWrong
-from icx.utils import validate_password, get_timestamp_us, get_tx_hash, sign, create_jsonrpc_request_content, post, \
-        get_payload_of_json_rpc_get_balance, store_wallet, validate_key_store_file, key_from_key_store, read_wallet, \
+from icx.utils import validate_password, create_jsonrpc_request_content, \
+        store_wallet, validate_key_store_file, read_wallet, \
         get_balance, validate_address, validate_address_is_not_same, check_amount_and_fee_is_valid, make_params, \
         request_generator, get_balance_after_trasfer, check_balance_enough
 from icx.signer import IcxSigner
@@ -57,15 +57,13 @@ class Wallet:
            :param password:  Password including alphabet character, number, and special character.
 
            :return: Instance of Wallet class.
-           """
-
+        """
         if not validate_password(password):
             raise PasswordIsNotAcceptable
 
         try:
             signer = IcxSigner()
             byte_private_key = signer.private_key_bytes
-            byte_public_key = signer.public_key_bytes
 
             key_store_contents = create_keyfile_json(byte_private_key, bytes(password, 'utf-8'), iterations=262144)
             key_store_contents['address'] = "hx" + signer.address.hex()
@@ -73,12 +71,7 @@ class Wallet:
             json_string_keystore_data = json.dumps(key_store_contents)
             store_wallet(keystore_file_path, json_string_keystore_data)
 
-            text = f'Address({len(signer.address)}): hx{signer.address.hex()}\n' \
-                   + f'PrivateKey({len(byte_private_key)}): 0x{byte_private_key.hex()}\n' \
-                   + f'PublicKey({len(byte_public_key)}): 0x{byte_public_key.hex()}'
-
             wallet = Wallet(key_store_contents)
-            print(text)
             return wallet
 
         except FileExistsError:
@@ -98,7 +91,6 @@ class Wallet:
 
            :return: Instance of Wallet class.
            """
-
         byte_private_key, is_byte = None, None
 
         if hex_private_key:
@@ -108,17 +100,10 @@ class Wallet:
         try:
 
             signer = IcxSigner(byte_private_key, is_byte)
-            byte_private_key = signer.private_key_bytes
-            byte_public_key = signer.public_key_bytes
 
             wallet = Wallet()
             wallet.address = "hx" + signer.address.hex()
 
-            text = f'Address({len(signer.address)}): hx{signer.address.hex()}\n' \
-                   + f'PrivateKey({len(byte_private_key)}): 0x{byte_private_key.hex()}\n' \
-                   + f'PublicKey({len(byte_public_key)}): 0x{byte_public_key.hex()}'
-
-            print(text)
             return wallet
 
         except TypeError:
@@ -133,13 +118,11 @@ class Wallet:
 
             :return Instance of Wallet Class.
         """
-
         if not validate_password(password):
             raise PasswordIsNotAcceptable
 
         try:
             validate_key_store_file(keystore_file_path)
-            byte_private_key = key_from_key_store(keystore_file_path, bytes(password, 'utf-8'))
             wallet = Wallet(read_wallet(keystore_file_path))
             return wallet
         except FileNotFoundError:
@@ -158,9 +141,8 @@ class Wallet:
             :param api_url: Api url. type(str)
             :param hex_private_key: the private key with a hexadecimal number
 
-            :return:
+            :return: response
         """
-
         try:
 
             api_url = f'{api_url}v2'
@@ -195,19 +177,30 @@ class Wallet:
         except ValueError:
             raise PasswordIsWrong
 
-    def get_wallet_info(self):
-        """ get the keystore file information and the balance """
+    def get_wallet_info(self, api_url):
+        """ get the keystore file information and the balance
 
-        pass
+            :param api_url type(str)
 
-    def get_balance(self):
-        """ get the balance """
+            :return wallet information. type(dict)
+        """
+        balance = get_balance(self.address, api_url)
+        self.wallet_info['balance'] = balance
+        return self.wallet_info
 
-        pass
+    def get_balance(self, api_url):
+        """ get the balance
+
+            :param api_url type(str)
+
+            :return wallet information. type(dict)
+        """
+        balance = get_balance(self.address, api_url)
+        return balance
 
     def get_address(self):
-        """ get the address"""
-
-        pass
+        """ get the address
+        """
+        return self.address
 
 

@@ -38,7 +38,7 @@ class AddressIsWrong(Error):
     pass
 
 
-class NoEnoughBalanceInWallet(Error):
+class NotEnoughBalanceInWallet(Error):
     """Exception raised for "Wallet does not have enough balance." """
     pass
 

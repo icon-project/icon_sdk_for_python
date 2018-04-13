@@ -1,12 +1,11 @@
 import os
 import unittest
-
 from icx.utils import get_tx_hash, sign
-from icx.custom_error import FilePathIsWrong, PasswordIsWrong, NoEnoughBalanceInWallet, TransferFeeIsInvalid, \
+from icx.custom_error import FilePathIsWrong, PasswordIsWrong, NotEnoughBalanceInWallet, TransferFeeIsInvalid, \
     AddressIsWrong, FeeIsBiggerThanAmount, AmountIsInvalid, AddressIsSame, PasswordIsNotAcceptable
 from icx.wallet.wallet import Wallet
 
-TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+TEST_DIR = os.path.dirname(os.path.abspath("tests/keystore_file/not_a_key_store_file.txt"))
 
 
 class TestTransferValue(unittest.TestCase):
@@ -14,7 +13,6 @@ class TestTransferValue(unittest.TestCase):
     def test_get_tx(self):
         """ Test for get_tx_hash function.
         """
-
         method = "method"
         params = {"param1": 1}
 
@@ -24,9 +22,8 @@ class TestTransferValue(unittest.TestCase):
         self.assertEqual(expect, tx_hash)
 
     def test_sign(self):
-        """Test for sign function.
+        """ Test for sign function.
         """
-
         tx_hash = b'\xc0\x84\x19o\xd3\xe6<\x9e%\xd9\x05\xd4\x8di\x17\xd3\x02<a\xc6\xa2\xb2\xec I-\x12\xe1n\xd5\xac:'
         private_key_bytes = b'x\xf3\xda\xdc\x80h\xf3hc`L\x1f\xc4Y\x83z@\xa2Mn$\x94\x16\x01\x83\x9cYp\x1d,\x93\xdd'
 
@@ -38,7 +35,6 @@ class TestTransferValue(unittest.TestCase):
     def test0(self):
         """ Case when succeed transfer value.
         """
-
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
@@ -56,7 +52,6 @@ class TestTransferValue(unittest.TestCase):
     def test1(self):
         """ Case when key_store_file_path is wrong.
         """
-
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "./wrong_path")
 
@@ -74,7 +69,6 @@ class TestTransferValue(unittest.TestCase):
     def test2_1(self):
         """ Case when password is not acceptable.
         """
-
         password = "wrong_password"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
@@ -92,7 +86,6 @@ class TestTransferValue(unittest.TestCase):
     def test2_2(self):
         """ Case when password is wrong.
         """
-
         password = "wrong_password123"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
@@ -110,7 +103,6 @@ class TestTransferValue(unittest.TestCase):
     def test3(self):
         """ Case when wallet does not have enough balance.
         """
-
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
@@ -120,7 +112,7 @@ class TestTransferValue(unittest.TestCase):
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="10000000000000000000000000000000000000000000000000", fee=10000000000000000)
 
-        except NoEnoughBalanceInWallet:
+        except NotEnoughBalanceInWallet:
             self.assertTrue(True)
         else:
             self.assertTrue(False)
@@ -128,7 +120,6 @@ class TestTransferValue(unittest.TestCase):
     def test4(self):
         """ Case when transfer fee is invalid.
         """
-
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
@@ -146,7 +137,6 @@ class TestTransferValue(unittest.TestCase):
     def test5(self):
         """ Case when wallet address is wrong.
         """
-
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
@@ -181,7 +171,6 @@ class TestTransferValue(unittest.TestCase):
     def test7(self):
         """ Case when Fee is bigger than Amount.
         """
-
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
         try:
@@ -198,7 +187,6 @@ class TestTransferValue(unittest.TestCase):
     def test8(self):
         """ Case when Amount is 0.
         """
-
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
         try:
@@ -215,7 +203,6 @@ class TestTransferValue(unittest.TestCase):
     def test9(self):
         """ Case when balance is same as sum of Amount and Fee.
         """
-
         password = "ejfnvm1234*"
         keystore_file_path1 = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
@@ -240,7 +227,6 @@ class TestTransferValue(unittest.TestCase):
     def test10(self):
         """ Case when wallet address to transfer is same as wallet address to be sent.
         """
-
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
         try:

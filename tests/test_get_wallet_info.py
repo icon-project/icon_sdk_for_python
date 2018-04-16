@@ -6,15 +6,14 @@ from icx.wallet.wallet import Wallet
 
 TEST_DIR = os.path.dirname(os.path.abspath("tests/keystore_file/not_a_key_store_file.txt"))
 
-api_url = 'https://testwallet.icon.foundation/api/'
+uri = 'https://testwallet.icon.foundation/api/'
 
 
 class TestGetWalletInfo(unittest.TestCase):
 
     def test0(self):
-        """ Case when returning the wallet address successfully.
+        """ Case to return the wallet address successfully.
         """
-
         # Given
         password = "Adas21312**"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
@@ -23,7 +22,7 @@ class TestGetWalletInfo(unittest.TestCase):
         try:
 
             wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
-            wallet_info = wallet.get_wallet_info(api_url)
+            wallet_info = wallet.get_wallet_info(uri)
 
             prefix = wallet_info['address'][0:2]
             self.assertEqual(prefix, "hx")
@@ -31,10 +30,9 @@ class TestGetWalletInfo(unittest.TestCase):
         except FileNotFoundError:
             self.assertFalse(True)
 
-    def test3(self):
-        """ Case when returning the balance successfully.
+    def test1(self):
+        """ Case to return the balance successfully.
         """
-
         # Given
         password = "Adas21312**"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
@@ -42,17 +40,16 @@ class TestGetWalletInfo(unittest.TestCase):
         # When
         try:
             wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
-            wallet_info = wallet.get_wallet_info(api_url)
+            wallet_info = wallet.get_wallet_info(uri)
             balance = wallet_info['balance']
 
             self.assertTrue(type(balance) == int)
         finally:
             pass
 
-    def test4(self):
-        """ Case when returning the wallet info in keystore file successfully.
+    def test2(self):
+        """ Case to return the wallet info in keystore file successfully.
         """
-
         # Given
         password = "Adas21312**"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
@@ -60,7 +57,7 @@ class TestGetWalletInfo(unittest.TestCase):
         # When
         try:
             wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
-            wallet_info = wallet.get_wallet_info(api_url)
+            wallet_info = wallet.get_wallet_info(uri)
 
             self.assertTrue(type(wallet_info) == dict)
         finally:

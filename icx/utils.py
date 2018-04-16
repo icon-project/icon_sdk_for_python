@@ -401,16 +401,16 @@ def read_wallet(file_path):
     return wallet_info
 
 
-def get_balance_after_trasfer(address, url, request_gen):
+def get_balance_after_trasfer(address, uri, request_gen):
     """ Get balance of the address indicated by address for check balance before transfer icx.
 
     :param address: Icx account address starting with 'hx'
-    :param url: Api url. type(str)
+    :param uri: Api uri. type(str)
     :param request_gen:
 
     :return: Balance of the user's wallet.
     """
-    payload_for_balance = get_payload_of_json_rpc_get_balance(address, url)
+    payload_for_balance = get_payload_of_json_rpc_get_balance(address, uri)
 
     next(request_gen)
     balance_content = request_gen.send(payload_for_balance).json()

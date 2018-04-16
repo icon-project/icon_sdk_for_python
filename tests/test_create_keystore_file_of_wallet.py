@@ -16,9 +16,9 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
             os.remove(file_path)
 
     def test0(self):
-        """ Case when created wallet successfully.
+        """ Case to create wallet successfully.
         """
-        # Givenz
+        # Given
         password = "Adas21312**"
         file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
@@ -41,7 +41,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
         os.remove(file_path)
 
     def test1(self):
-        """ Case when user enters a directory that does not exist.
+        """ Case to enter a directory that does not exist.
         """
         # Given
         password = "Adas21312**"
@@ -56,7 +56,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
             self.assertTrue(True)
 
     def test2(self):
-        """ Case when user enters a invalid password.
+        """ Case to enter a invalid password.
         """
         # Given
         password = "123 4"
@@ -71,7 +71,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
             self.assertTrue(True)
 
     def test3(self):
-        """ Case when user enters a directory without permission to write file.
+        """ Case to enter a directory without permission to write file.
         """
         # Given
         password = "Adas21312**"
@@ -85,7 +85,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
             self.assertTrue(True)
 
     def test4(self):
-        """ Case when user tries to overwrite keystore file.
+        """ Case to overwrite keystore file.
         """
         # Given
         password = "Adas21312**"
@@ -105,7 +105,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
             os.remove(file_path)
 
     def test5(self):
-        """ Case when user entered the file, not a key_store_file.
+        """ Case to enter the file, not a key_store_file.
         """
         file_path = os.path.join(TEST_DIR, "not_a_key_store_file.txt")\
 
@@ -116,7 +116,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
             self.assertTrue(True)
 
     def test6(self):
-        """ Check the file is saved in the correct format.
+        """ Case to save the file in the correct format.
         """
         # Given
         password = "Adas21312**"

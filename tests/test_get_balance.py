@@ -7,13 +7,13 @@ requests.packages.urllib3.disable_warnings()
 
 TEST_DIR = os.path.dirname(os.path.abspath("tests/keystore_file/not_a_key_store_file.txt"))
 
-api_url = 'https://testwallet.icon.foundation/api/'
+uri = 'https://testwallet.icon.foundation/api/'
 
 
 class TestGetBalance(unittest.TestCase):
 
     def test_change_hex_balance_to_decimal_balance_case0(self):
-        """ Case when returning the right balance.
+        """ Case to return the right balance.
         """
 
         # Given
@@ -28,7 +28,7 @@ class TestGetBalance(unittest.TestCase):
             pass
 
     def test_change_hex_balance_to_decimal_balance_case1(self):
-        """ Case when returning the wrong balance.
+        """ Case to return the wrong balance.
         """
 
         # Given
@@ -43,7 +43,7 @@ class TestGetBalance(unittest.TestCase):
             pass
 
     def test0(self):
-        """ Case when getting balance successfully that balance is 0.
+        """ Case to get balance successfully that balance is 0.
         """
 
         # Given
@@ -53,13 +53,13 @@ class TestGetBalance(unittest.TestCase):
         # When
         try:
             wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
-            balance = wallet.get_balance(api_url)
+            balance = wallet.get_balance(uri)
             self.assertTrue(type(balance) == int)
         finally:
             pass
 
     def test1(self):
-        """ Case when getting balance successfully that balance is more than 0.
+        """ Case to get balance successfully that balance is more than 0.
         """
 
         # Given
@@ -69,7 +69,7 @@ class TestGetBalance(unittest.TestCase):
         # When
         try:
             wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
-            balance = wallet.get_balance(api_url)
+            balance = wallet.get_balance(uri)
             self.assertTrue(type(balance) == int and balance > 0)
         finally:
             pass

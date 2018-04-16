@@ -11,11 +11,11 @@ from icx.signer import IcxSigner
 
 class Wallet:
 
-    def __init__(self, wallet_data: dict=None, public_key=None, api_url="https://testwallet.icon.foundation/api/", address: str=None):
+    def __init__(self, wallet_data: dict=None, public_key=None, uri="https://testwallet.icon.foundation/api/", address: str=None):
         self.__wallet_info = wallet_data if wallet_data else wallet_data
         self.__address = self.__wallet_info["address"] if wallet_data else address          # an address of the wallet
         self.__public_key = public_key                                                      # a public key of the wallet
-        self.__api_url = api_url                                                            # a target url for api
+        self.__uri = uri                                                                    # a target uri for api
 
     @property
     def address(self):
@@ -30,8 +30,8 @@ class Wallet:
         return self.__public_key
 
     @property
-    def api_url(self):
-        return self.__api_url
+    def uri(self):
+        return self.__uri
 
     @address.setter
     def address(self, address):
@@ -45,9 +45,9 @@ class Wallet:
     def public_key(self, public_key):
         self.__public_key = public_key
 
-    @api_url.setter
-    def api_url(self, api_url):
-        self.__api_url = api_url
+    @uri.setter
+    def uri(self, uri):
+        self.__uri = uri
 
     @staticmethod
     def create_keystore_file_of_wallet(keystore_file_path, password):
@@ -131,21 +131,21 @@ class Wallet:
             raise PasswordIsWrong
 
     def transfer_value(self, password, to_address, value, fee=10000000000000000,
-                       api_url='https://testwallet.icon.foundation/api/', hex_private_key=None, **kwargs):
+                       uri='https://testwallet.icon.foundation/api/', hex_private_key=None, **kwargs):
         """ transfer the specific value with private key
 
             :param password:  Password including alphabet character, number, and special character.
             :param to_address: Address of wallet to receive the asset.
             :param value: Amount of money.
             :param fee: Transaction fee.
-            :param api_url: Api url. type(str)
+            :param uri: Api url. type(str)
             :param hex_private_key: the private key with a hexadecimal number
 
             :return: response
         """
         try:
 
-            api_url = f'{api_url}v2'
+            uri = f'{uri}v2'
             byte_private_key = decode_keyfile_json(self.wallet_info, bytes(password, 'utf-8'))
 
             validate_address(to_address)
@@ -161,8 +161,8 @@ class Wallet:
             payload = create_jsonrpc_request_content(0, method, params)
 
             # Request the balance repeatedly until we get the response from ICON network.
-            request_gen = request_generator(api_url)
-            balance = get_balance_after_trasfer(self.address, api_url, request_gen)
+            request_gen = request_generator(uri)
+            balance = get_balance_after_trasfer(self.address, uri, request_gen)
             check_balance_enough(balance, value, fee)
             next(request_gen)
             response = request_gen.send(payload)
@@ -177,25 +177,25 @@ class Wallet:
         except ValueError:
             raise PasswordIsWrong
 
-    def get_wallet_info(self, api_url):
+    def get_wallet_info(self, uri):
         """ get the keystore file information and the balance
 
-            :param api_url type(str)
+            :param uri type(str)
 
             :return wallet information. type(dict)
         """
-        balance = get_balance(self.address, api_url)
+        balance = get_balance(self.address, uri)
         self.wallet_info['balance'] = balance
         return self.wallet_info
 
-    def get_balance(self, api_url):
+    def get_balance(self, uri):
         """ get the balance
 
-            :param api_url type(str)
+            :param uri type(str)
 
             :return wallet information. type(dict)
         """
-        balance = get_balance(self.address, api_url)
+        balance = get_balance(self.address, uri)
         return balance
 
     def get_address(self):

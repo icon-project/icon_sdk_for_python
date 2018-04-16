@@ -7,13 +7,11 @@ from icx.custom_error import FilePathIsWrong, PasswordIsWrong
 
 TEST_DIR = os.path.dirname(os.path.abspath("tests/keystore_file/not_a_key_store_file.txt"))
 
-url = 'https://testwallet.icon.foundation/api/'
-
 
 class TestOpenKeystoreFileOfWallet(unittest.TestCase):
 
     def test0(self):
-        """ Case when opening wallet successfully.
+        """ Case to open wallet successfully.
         """
 
         # Given
@@ -32,7 +30,7 @@ class TestOpenKeystoreFileOfWallet(unittest.TestCase):
             self.assertFalse(True)
 
     def test1(self):
-        """ Case when user enters a directory that does not exist.
+        """ Case to enter a directory that does not exist.
         """
 
         # Given
@@ -50,7 +48,7 @@ class TestOpenKeystoreFileOfWallet(unittest.TestCase):
             self.assertTrue(True)
 
     def test2(self):
-        """ Case when user enters a invalid password.
+        """ Case to enter a invalid password.
         """
 
         # Given
@@ -66,7 +64,7 @@ class TestOpenKeystoreFileOfWallet(unittest.TestCase):
             self.assertTrue(True)
 
     def test3(self):
-        """ Case when returning the wallet info in keystore file successfully.
+        """ Case to return the wallet info in keystore file successfully.
         """
 
         # Given

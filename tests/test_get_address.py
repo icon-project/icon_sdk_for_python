@@ -7,20 +7,18 @@ from icx.custom_error import FilePathIsWrong
 
 TEST_DIR = os.path.dirname(os.path.abspath("tests/keystore_file/not_a_key_store_file.txt"))
 
-url = 'https://testwallet.icon.foundation/api/'
-
 
 class TestGetAddress(unittest.TestCase):
 
     def test0(self):
-        """ Case when getting an address successfully on creating an wallet by private key
+        """ Case to verify the wallet address from the wallet generated from private key
         """
 
         wallet = Wallet.create_wallet_by_private_key('71fc378d3a3fb92b57474af156f376711a8a89d277c9b60a923a1db75575b1cc')
         self.assertEqual(wallet.get_address(), "hxcc7b1f5fb98ca1eeaf9586bc08048814cb0d4d3d")
 
     def test1(self):
-        """ Case when getting an address successfully on creating a keystore file of wallet
+        """ Case to get an address successfully on creating a keystore file of wallet
         """
 
         file_path = os.path.join(TEST_DIR, "test_keystore.txt")
@@ -42,7 +40,7 @@ class TestGetAddress(unittest.TestCase):
             self.assertFalse(True)
 
     def test2(self):
-        """ Case when getting an address successfully on opening a keystore file of wallet.
+        """ Case to get an address successfully on opening a keystore file of wallet.
         """
 
         password = "Adas21312**"

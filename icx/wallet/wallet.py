@@ -1,21 +1,21 @@
 import json
-import os
-import codecs
+from eth_keyfile import create_keyfile_json, decode_keyfile_json
 from icx.custom_error import PasswordIsNotAcceptable, FileExists, NoPermissionToWriteFile, FilePathIsWrong, \
-    FilePathWithoutFileName
-from icx.utils import validate_password, get_timestamp_us, get_tx_hash, sign, create_jsonrpc_request_content, post, \
-        get_payload_of_json_rpc_get_balance
+    FilePathWithoutFileName, PasswordIsWrong
+from icx.utils import validate_password, create_jsonrpc_request_content, \
+        store_wallet, validate_key_store_file, read_wallet, \
+        get_balance, validate_address, validate_address_is_not_same, check_amount_and_fee_is_valid, make_params, \
+        request_generator, get_balance_after_trasfer, check_balance_enough, key_from_key_store
 from icx.signer import IcxSigner
-from eth_keyfile import create_keyfile_json, extract_key_from_keyfile
 
 
 class Wallet:
 
-    def __init__(self, wallet_data=None, public_key=None, api_url="https://testwallet.icon.foundation/api/", address=None):
-        self.__wallet_info = json.loads(wallet_data) if wallet_data else wallet_data
+    def __init__(self, wallet_data: dict=None, public_key=None, uri="https://testwallet.icon.foundation/api/", address: str=None):
+        self.__wallet_info = wallet_data if wallet_data else wallet_data
         self.__address = self.__wallet_info["address"] if wallet_data else address          # an address of the wallet
         self.__public_key = public_key                                                      # a public key of the wallet
-        self.__api_url = api_url                                                            # a target url for api
+        self.__uri = uri                                                                    # a target uri for api
 
     @property
     def address(self):
@@ -30,8 +30,8 @@ class Wallet:
         return self.__public_key
 
     @property
-    def api_url(self):
-        return self.__api_url
+    def uri(self):
+        return self.__uri
 
     @address.setter
     def address(self, address):
@@ -45,9 +45,9 @@ class Wallet:
     def public_key(self, public_key):
         self.__public_key = public_key
 
-    @api_url.setter
-    def api_url(self, api_url):
-        self.__api_url = api_url
+    @uri.setter
+    def uri(self, uri):
+        self.__uri = uri
 
     @staticmethod
     def create_keystore_file_of_wallet(keystore_file_path, password):
@@ -55,32 +55,24 @@ class Wallet:
 
            :param keystore_file_path: File path for the keystore file of the wallet.
            :param password:  Password including alphabet character, number, and special character.
-           If the user doesn't give password with -p, then CLI will show the prompt and user need to type the password.
-           :return: Instance of Wallet class.
-           """
 
+           :return: Instance of Wallet class.
+        """
         if not validate_password(password):
             raise PasswordIsNotAcceptable
 
         try:
             signer = IcxSigner()
             byte_private_key = signer.private_key_bytes
-            byte_public_key = signer.public_key_bytes
 
             key_store_contents = create_keyfile_json(byte_private_key, bytes(password, 'utf-8'), iterations=262144)
             key_store_contents['address'] = "hx" + signer.address.hex()
             key_store_contents['coinType'] = 'icx'
-            json_string = json.dumps(key_store_contents)
+            json_string_keystore_data = json.dumps(key_store_contents)
+            store_wallet(keystore_file_path, json_string_keystore_data)
 
-            store_wallet(keystore_file_path, json_string)
-
-            text = f'Address({len(signer.address)}): hx{signer.address.hex()}\n' \
-                   + f'PrivateKey({len(byte_private_key)}): 0x{byte_private_key.hex()}\n' \
-                   + f'PublicKey({len(byte_public_key)}): 0x{byte_public_key.hex()}'
-
-            w = Wallet(json_string)
-            print(text)
-            return w
+            wallet = Wallet(key_store_contents)
+            return wallet, signer.private_key_bytes.hex()
 
         except FileExistsError:
             raise FileExists
@@ -96,9 +88,9 @@ class Wallet:
         """ create wallet without keystore file
 
            :param hex_private_key: the private key with a hexadecimal number
+
            :return: Instance of Wallet class.
            """
-
         byte_private_key, is_byte = None, None
 
         if hex_private_key:
@@ -108,164 +100,110 @@ class Wallet:
         try:
 
             signer = IcxSigner(byte_private_key, is_byte)
-            byte_private_key = signer.private_key_bytes
-            byte_public_key = signer.public_key_bytes
 
-            w = Wallet()
-            w.address = "hx" + signer.address.hex()
+            wallet = Wallet()
+            wallet.address = "hx" + signer.address.hex()
 
-            text = f'Address({len(signer.address)}): hx{signer.address.hex()}\n' \
-                   + f'PrivateKey({len(byte_private_key)}): 0x{byte_private_key.hex()}\n' \
-                   + f'PublicKey({len(byte_public_key)}): 0x{byte_public_key.hex()}'
-
-            print(text)
-            return w
+            return_value = (wallet, signer.private_key_bytes.hex())
+            return return_value
 
         except TypeError:
             raise TypeError
 
-    def open_keystore_file(self, keystore_file_path, password):
-        """ open the keystore file and read the information of the file """
+    @staticmethod
+    def open_keystore_file_of_wallet(keystore_file_path, password):
+        """ open the keystore file and read the information of the file
 
-        return "keystore_info"
+            :param keystore_file_path: File path for the keystore file of the wallet.
+            :param password:  Password including alphabet character, number, and special character.
 
-    def transfer(self, private_key, url, from_address, to_address, loop, fee):
-        """ transfer the specific value with private key """
+            :return Instance of Wallet Class.
+        """
+        if not validate_password(password):
+            raise PasswordIsNotAcceptable
 
-        pass
+        try:
+            validate_key_store_file(keystore_file_path)
+            private_key_bytes = key_from_key_store(keystore_file_path, bytes(password, 'utf-8'))
+            wallet = Wallet(read_wallet(keystore_file_path))
+            return_value = (wallet, private_key_bytes.hex())
+            return return_value
+        except FileNotFoundError:
+            raise FilePathIsWrong
+        except ValueError:
+            raise PasswordIsWrong
 
-    def get_wallet_info(self):
-        """ get the keystore file information and the balance """
+    def transfer_value(self, password, to_address, value, fee=10000000000000000,
+                       uri='https://testwallet.icon.foundation/api/', hex_private_key=None, **kwargs):
+        """ transfer the specific value with private key
 
-        pass
+            :param password:  Password including alphabet character, number, and special character.
+            :param to_address: Address of wallet to receive the asset.
+            :param value: Amount of money.
+            :param fee: Transaction fee.
+            :param uri: Api url. type(str)
+            :param hex_private_key: the private key with a hexadecimal number
 
-    def get_balance(self):
-        """ get the balance """
+            :return: response
+        """
+        try:
 
-        pass
+            uri = f'{uri}v2'
+            byte_private_key = decode_keyfile_json(self.wallet_info, bytes(password, 'utf-8'))
+
+            validate_address(to_address)
+            validate_address(self.address)
+            validate_address_is_not_same(to_address, self.address)
+
+            method = 'icx_sendTransaction'
+            value, fee = int(value), int(fee)
+
+            check_amount_and_fee_is_valid(value, fee)
+
+            params = make_params(self.address, to_address, value, fee, method, byte_private_key)
+            payload = create_jsonrpc_request_content(0, method, params)
+
+            # Request the balance repeatedly until we get the response from ICON network.
+            request_gen = request_generator(uri)
+            balance = get_balance_after_trasfer(self.address, uri, request_gen)
+            check_balance_enough(balance, value, fee)
+            next(request_gen)
+            response = request_gen.send(payload)
+            return response
+
+        except FileNotFoundError:
+            print("File does not exists.")
+            raise FilePathIsWrong
+        except IsADirectoryError:
+            print(f"{file_path} is a directory.")
+            raise FilePathIsWrong
+        except ValueError:
+            raise PasswordIsWrong
+
+    def get_wallet_info(self, uri):
+        """ get the keystore file information and the balance
+
+            :param uri type(str)
+
+            :return wallet information. type(dict)
+        """
+        balance = get_balance(self.address, uri)
+        self.wallet_info['balance'] = balance
+        return self.wallet_info
+
+    def get_balance(self, uri):
+        """ get the balance
+
+            :param uri type(str)
+
+            :return wallet information. type(dict)
+        """
+        balance = get_balance(self.address, uri)
+        return balance
 
     def get_address(self):
-        """ get the address"""
-
-        pass
-
-
-def make_params(user_address, to, amount, fee, method, private_key_bytes):
-    """Make params for jsonrpc format.
-
-    :param user_address: Address of user's wallet.
-    :param to: Address of wallet to receive the asset.
-    :param amount: Amount of money.
-    :param fee: Transaction fee.
-    :param method: Method type. type(str)
-    :param private_key_bytes: Private key of user's wallet.
-    :return:
-    type(dict)
-    """
-    params = {
-        'from': user_address,
-        'to': to,
-        'value': hex(amount),
-        'fee': hex(fee),
-        'timestamp': str(get_timestamp_us())
-    }
-    tx_hash_bytes = get_tx_hash(method, params)
-    signature_bytes = sign(private_key_bytes, tx_hash_bytes)
-    params['tx_hash'] = tx_hash_bytes.hex()
-    params['signature'] = signature_bytes.decode()
-
-    return params
+        """ get the address
+        """
+        return self.address
 
 
-def store_wallet(file_path, json_string):
-    """ Store wallet information file in JSON format.
-
-    :param file_path: The path where the file will be saved. type: str
-    :param json_string: Contents of key_store_file
-    """
-    if os.path.isfile(file_path):
-        raise FileExistsError
-
-    with open(file_path, 'wt') as f:
-        f.write(json_string)
-
-
-def make_key_store_content(password):
-    """ Make a content of key_store.
-
-    :param password: Password including alphabet character, number, and special character.
-    If the user doesn't give password with -p, then CLI will show the prompt and user need to type the password.
-    :return:
-    key_store_content(dict)
-    """
-    signer = IcxSigner()
-    private_key = signer.private_key
-    key_store_contents = create_keyfile_json(private_key, bytes(password, 'utf-8'), iterations=262144)
-    icx_address = "hx" + signer.address.hex()
-    key_store_contents['address'] = icx_address
-    key_store_contents['coinType'] = 'icx'
-    return key_store_contents
-
-
-def key_from_key_store(file_path, password):
-    """
-
-    :param file_path:
-    :return:
-    """
-    with open(file_path, 'rb') as file:
-        private_key = extract_key_from_keyfile(file, password)
-    return private_key
-
-
-def get_balance(address, url):
-    """ Get balance of the address indicated by address.
-
-    :param address: icx account address starting with 'hx'
-    :param url:
-    :return: icx
-    """
-    url = f'{url}v2'
-
-    method = 'icx_getBalance'
-    params = {'address': address}
-    payload = create_jsonrpc_request_content(0, method, params)
-    response = post(url, payload)
-    content = response.json()
-    hex_balance = content['result']['response']
-    dec_loop_balance = int(hex_balance, 16)
-
-    return dec_loop_balance
-
-
-def read_wallet(file_path):
-    """Read keystore file
-
-    :param file_path:
-    :return: wallet_info
-    """
-    if not os.path.isfile(file_path):
-        raise FileNotFoundError
-    with codecs.open(file_path, 'r', 'utf-8-sig') as f:
-        wallet_info = json.load(f)
-        f.close()
-
-    return wallet_info
-
-
-def get_balance_after_trasfer(address, url, request_gen):
-    """ Get balance of the address indicated by address for check balance before transfer icx.
-
-    :param address: Icx account address starting with 'hx'
-    :param url: Api url. type(str)
-    :param request_gen:
-    :return: Balance of the user's wallet.
-    """
-    payload_for_balance = get_payload_of_json_rpc_get_balance(address, url)
-
-    next(request_gen)
-    balance_content = request_gen.send(payload_for_balance).json()
-
-    balance = balance_content['result']['response']
-    balance_loop = int(balance, 16)
-    return balance_loop

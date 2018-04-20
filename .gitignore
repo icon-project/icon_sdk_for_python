@@ -18,5 +18,5 @@ ENV/
 env.bak/
 venv.bak/
 
-tests/test_keystore.txt
+tests/keystore_file/test_keystore.txt
 

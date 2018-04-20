@@ -72,8 +72,7 @@ class Wallet:
             store_wallet(keystore_file_path, json_string_keystore_data)
 
             wallet = Wallet(key_store_contents)
-            return_value = (wallet, signer.private_key_bytes.hex())
-            return return_value
+            return wallet, signer.private_key_bytes.hex()
 
         except FileExistsError:
             raise FileExists

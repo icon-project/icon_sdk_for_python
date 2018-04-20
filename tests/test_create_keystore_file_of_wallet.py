@@ -1,6 +1,5 @@
 import unittest
 import os
-import json
 from icx.wallet.wallet import Wallet
 from icx.custom_error import FilePathIsWrong, PasswordIsNotAcceptable, NoPermissionToWriteFile, FileExists, NotAKeyStoreFile
 from icx.utils import validate_key_store_file
@@ -23,8 +22,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
         file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
         try:
-            wallet1 = Wallet.create_keystore_file_of_wallet(file_path, password)[0]
-            # Then
+            wallet1, _ = Wallet.create_keystore_file_of_wallet(file_path, password)
             prefix = wallet1.address[0:2]
             self.assertEqual(prefix, "hx")
 
@@ -45,7 +43,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
         file_path = os.path.join(TEST_DIR, 'unknown', "test_keystore.txt")
 
         try:
-            wallet1 = Wallet.create_keystore_file_of_wallet(file_path, password)
+            wallet1, _ = Wallet.create_keystore_file_of_wallet(file_path, password)
         except FilePathIsWrong:
             self.assertTrue(True)
 
@@ -56,7 +54,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
         file_path = os.path.join(TEST_DIR, "unknown_folder", "test_keystore.txt")
 
         try:
-            wallet1 = Wallet.create_keystore_file_of_wallet(file_path, password)
+            wallet1, _ = Wallet.create_keystore_file_of_wallet(file_path, password)
         except PasswordIsNotAcceptable:
             self.assertTrue(True)
 
@@ -67,7 +65,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
         file_path = os.path.join("/", "test_keystore.txt")
 
         try:
-            wallet1 = Wallet.create_keystore_file_of_wallet(file_path, password)
+            wallet1, _ = Wallet.create_keystore_file_of_wallet(file_path, password)
         except NoPermissionToWriteFile:
             self.assertTrue(True)
 
@@ -77,10 +75,10 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
         password = "Adas21312**"
         file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
-        wallet1 = Wallet.create_keystore_file_of_wallet(file_path, password)
+        wallet1, _ = Wallet.create_keystore_file_of_wallet(file_path, password)
 
         try:
-            wallet2 = Wallet.create_keystore_file_of_wallet(file_path, password)
+            wallet2, _ = Wallet.create_keystore_file_of_wallet(file_path, password)
         except FileExists:  # Raise exception that file exists.
             self.assertTrue(True)
 
@@ -90,10 +88,10 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
     def test5(self):
         """ Case to enter the file, not a key_store_file.
         """
-        file_path = os.path.join(TEST_DIR, "not_a_key_store_file.txt")\
+        file_path = os.path.join(TEST_DIR, "not_a_key_store_file.txt")
 
         try:
-            wallet1 = validate_key_store_file(file_path)
+            validate_key_store_file(file_path)
         except NotAKeyStoreFile:
             self.assertTrue(True)
 
@@ -103,7 +101,7 @@ class TestCreateWalletAndKeystoreFile(unittest.TestCase):
         password = "Adas21312**"
         file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
-        wallet1 = Wallet.create_keystore_file_of_wallet(file_path, password)
+        wallet1, _ = Wallet.create_keystore_file_of_wallet(file_path, password)
         self.assertTrue(validate_key_store_file(file_path))
 
 

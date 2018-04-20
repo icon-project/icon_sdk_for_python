@@ -36,7 +36,7 @@ class TestGetBalance(unittest.TestCase):
         password = "Adas21312**"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
-        wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
+        wallet, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
         balance = wallet.get_balance(uri)
         self.assertTrue(type(balance) == int)
 
@@ -46,7 +46,7 @@ class TestGetBalance(unittest.TestCase):
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
-        wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
+        wallet, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
         balance = wallet.get_balance(uri)
         self.assertTrue(type(balance) == int and balance > 0)
 

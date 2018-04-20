@@ -99,7 +99,7 @@ def validate_key_store_file(key_store_file_path: object) -> bool:
 
 
 def validate_wallet_info(wallet_info: dict) -> bool:
-    """ Check a wallet info is in the correct format.
+    """ Check a wallet info has the right format or not.
 
     :param wallet_info:
     :return: bool

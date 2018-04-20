@@ -19,7 +19,7 @@ class TestGetWalletInfo(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
+            wallet, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
             wallet_info = wallet.get_wallet_info(uri)
             prefix = wallet_info['address'][0:2]
             self.assertEqual(prefix, "hx")
@@ -33,7 +33,7 @@ class TestGetWalletInfo(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
+            wallet, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
             wallet_info = wallet.get_wallet_info(uri)
             balance = wallet_info['balance']
             self.assertTrue(type(balance) == int)
@@ -47,7 +47,7 @@ class TestGetWalletInfo(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
+            wallet, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
             wallet_info = wallet.get_wallet_info(uri)
 
             self.assertTrue(type(wallet_info) == dict)
@@ -61,7 +61,7 @@ class TestGetWalletInfo(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
+            wallet, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
             wallet_info = wallet.get_wallet_info(uri)
             self.assertTrue(validate_wallet_info(wallet_info))
         except FileNotFoundError:
@@ -74,7 +74,7 @@ class TestGetWalletInfo(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
+            wallet, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
             wallet_info = wallet.get_wallet_info(uri)
             del wallet_info["address"]
             self.assertFalse(validate_wallet_info(wallet_info))

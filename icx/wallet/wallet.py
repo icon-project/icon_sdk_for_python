@@ -5,7 +5,7 @@ from icx.custom_error import PasswordIsNotAcceptable, FileExists, NoPermissionTo
 from icx.utils import validate_password, create_jsonrpc_request_content, \
         store_wallet, validate_key_store_file, read_wallet, \
         get_balance, validate_address, validate_address_is_not_same, check_amount_and_fee_is_valid, make_params, \
-        request_generator, get_balance_after_trasfer, check_balance_enough
+        request_generator, get_balance_after_trasfer, check_balance_enough, key_from_key_store
 from icx.signer import IcxSigner
 
 
@@ -72,7 +72,8 @@ class Wallet:
             store_wallet(keystore_file_path, json_string_keystore_data)
 
             wallet = Wallet(key_store_contents)
-            return wallet
+            return_value = (wallet, signer.private_key_bytes.hex())
+            return return_value
 
         except FileExistsError:
             raise FileExists
@@ -104,7 +105,8 @@ class Wallet:
             wallet = Wallet()
             wallet.address = "hx" + signer.address.hex()
 
-            return wallet
+            return_value = (wallet, signer.private_key_bytes.hex())
+            return return_value
 
         except TypeError:
             raise TypeError
@@ -123,8 +125,10 @@ class Wallet:
 
         try:
             validate_key_store_file(keystore_file_path)
+            private_key_bytes = key_from_key_store(keystore_file_path, bytes(password, 'utf-8'))
             wallet = Wallet(read_wallet(keystore_file_path))
-            return wallet
+            return_value = (wallet, private_key_bytes.hex())
+            return return_value
         except FileNotFoundError:
             raise FilePathIsWrong
         except ValueError:

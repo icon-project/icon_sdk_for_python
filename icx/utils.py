@@ -79,14 +79,11 @@ def validate_key_store_file(key_store_file_path: object) -> bool:
     True: When the key_store_file was saved in valid format.
     False: When the key_store_file was saved in invalid format.
     """
-    is_valid = True
-
     # The key values ​​that should be in the root location.
     root_keys = ["version", "id", "address", "crypto"]
     crypto_keys = ["ciphertext", "cipherparams", "cipher", "kdf", "kdfparams", "mac"]
     crypto_cipherparams_keys = ["iv"]
     crypto_kdfparams_keys = ["dklen", "salt", "c", "prf"]
-    is_valid = False
 
     try:
         with open(key_store_file_path, 'rb') as key_store_file:
@@ -101,9 +98,30 @@ def validate_key_store_file(key_store_file_path: object) -> bool:
     return is_valid
 
 
-def has_keys(data, key_array):
+def validate_wallet_info(wallet_info: dict) -> bool:
+    """ Check a wallet info is in the correct format.
+
+    :param wallet_info:
+    :return: bool
+    True: When the wallet info is in the correct format.
+    False: When the wallet info is in the incorrect format.
+    """
+    root_keys = ["version", "id", "address", "crypto", "balance"]
+    crypto_keys = ["ciphertext", "cipherparams", "cipher", "kdf", "kdfparams", "mac"]
+    crypto_cipherparams_keys = ["iv"]
+    crypto_kdfparams_keys = ["dklen", "salt", "c", "prf"]
+
+    is_valid = has_keys(wallet_info, root_keys) and has_keys(wallet_info["crypto"], crypto_keys) and \
+               has_keys(wallet_info["crypto"]["cipherparams"], crypto_cipherparams_keys) and \
+               has_keys(wallet_info["crypto"]["kdfparams"], crypto_kdfparams_keys)
+    return is_valid
+
+
+def has_keys(dict_data, key_array):
     for key in key_array:
-        if key in data is False:
+        if key in dict_data.keys():
+            pass
+        else:
             return False
     return True
 
@@ -207,7 +225,6 @@ def sign(private_key_bytes, tx_hash_bytes):
     :param tx_hash_bytes:
     :return: base64-encoded string of recoverable signature data
     """
-
     recoverable_sig_bytes = sign_recoverable(private_key_bytes, tx_hash_bytes)
     return base64.b64encode(recoverable_sig_bytes)
 
@@ -235,7 +252,6 @@ def post(url, payload):
 
 
 def get_payload_of_json_rpc_get_balance(address, url):
-
     method = 'icx_getBalance'
     params = {'address': address}
     payload = create_jsonrpc_request_content(0, method, params)

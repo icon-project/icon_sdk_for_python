@@ -16,7 +16,7 @@ class TestTransferValue(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = bool(wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="1000000000000000000", fee=10000000000000000))
@@ -33,7 +33,7 @@ class TestTransferValue(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "./wrong_path")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="10000000000000000000", fee=10000000000000000)
@@ -50,7 +50,7 @@ class TestTransferValue(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="1000000000000000000", fee=10000000000000000)
@@ -67,7 +67,7 @@ class TestTransferValue(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="1000000000000000000", fee=10000000000000000)
@@ -84,7 +84,7 @@ class TestTransferValue(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="10000000000000000000000000000000000000000000000000", fee=10000000000000000)
@@ -101,7 +101,7 @@ class TestTransferValue(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="1000000000000000000", fee=100000000000)
@@ -118,7 +118,7 @@ class TestTransferValue(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed9",
                 value="1000000000000000000", fee=10000000000000000)
@@ -135,7 +135,7 @@ class TestTransferValue(unittest.TestCase):
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="11234440000000000000", fee=100000000000000)
@@ -151,7 +151,7 @@ class TestTransferValue(unittest.TestCase):
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="1000000000000000", fee=10000000000000000)
@@ -167,7 +167,7 @@ class TestTransferValue(unittest.TestCase):
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="0", fee=10000000000000000)
@@ -184,14 +184,16 @@ class TestTransferValue(unittest.TestCase):
         keystore_file_path1 = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
 
         try:
-            wallet1 = Wallet.open_keystore_file_of_wallet(keystore_file_path1, password)
+            wallet1 = Wallet.open_keystore_file_of_wallet(keystore_file_path1, password)[0]
+
+            # send the value to the address of keystore file (test_keystore_for_transfer2)
             ret = wallet1.transfer_value(
                 password, to_address="hx95e12b1f98f9b847175849f51bed5d121e742f6a",
-                value="1020000000000000000", fee=10000000000000000)
+                value="1010000000000000000", fee=10000000000000000)
 
             password = "Adas21312**"
             keystore_file_path2 = os.path.join(TEST_DIR, "test_keystore_for_transfer2.txt")
-            wallet2 = Wallet.open_keystore_file_of_wallet(keystore_file_path2, password)
+            wallet2 = Wallet.open_keystore_file_of_wallet(keystore_file_path2, password)[0]
             ret = wallet2.transfer_value(
                 password, to_address="hx66425784bfddb5b430136b38268c3ce1fb68e8c5",
                 value="1000000000000000000", fee=10000000000000000)
@@ -207,7 +209,7 @@ class TestTransferValue(unittest.TestCase):
         password = "ejfnvm1234*"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore_for_transfer.txt")
         try:
-            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+            wallet = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)[0]
             ret = wallet.transfer_value(
                 password, to_address="hx66425784bfddb5b430136b38268c3ce1fb68e8c5",
                 value="0", fee=10000000000000000)

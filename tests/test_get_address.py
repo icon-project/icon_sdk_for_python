@@ -13,7 +13,10 @@ class TestGetAddress(unittest.TestCase):
     def test0(self):
         """ Case to verify the wallet address from the wallet generated from private key
         """
+        # Given, When
         wallet, _ = Wallet.create_wallet_by_private_key('71fc378d3a3fb92b57474af156f376711a8a89d277c9b60a923a1db75575b1cc')
+
+        # Then
         self.assertEqual(wallet.get_address(), "hxcc7b1f5fb98ca1eeaf9586bc08048814cb0d4d3d")
 
     def test1(self):
@@ -23,11 +26,15 @@ class TestGetAddress(unittest.TestCase):
         if os.path.isfile(file_path):
             os.remove(file_path)
 
+        # Given
         password = "Adas21312**"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
         try:
+            # When
             wallet, _ = Wallet.create_keystore_file_of_wallet(keystore_file_path, password)
+
+            # Then
             prefix = wallet.get_address()[0:2]
             self.assertEqual(prefix, "hx")
 
@@ -39,12 +46,15 @@ class TestGetAddress(unittest.TestCase):
     def test2(self):
         """ Case to get an address successfully on opening a keystore file of wallet.
         """
+        # Given
         password = "Adas21312**"
         keystore_file_path = os.path.join(TEST_DIR, "test_keystore.txt")
 
         try:
+            # When
             wallet, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
 
+            # Then
             prefix = wallet.get_address()[0:2]
             self.assertEqual(prefix, "hx")
 

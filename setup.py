@@ -24,7 +24,7 @@ def find_version(*file_paths):
 requires = ['requests==2.18.4', "eth-keyfile==0.5.0", "secp256k1==0.13.2"]
 
 setup_options = {
-    'name': 'icon_sdk_for_python', 'version': find_version("icx", "__init__.py"),
+    'name': 'icon_sdk', 'version': find_version("icx", "__init__.py"),
     'description': 'SDK of icon for python',
     'long_description': open('README.rst').read(),
     'author': 'ICON foundation',

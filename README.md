@@ -215,7 +215,7 @@ Transfer the value from the given wallet to the specific address with the fee.
 
 * ```fee``` : Transfer fee (10000000000000000 loop)
 
-* ```uri``` : Uri of api. Default value is 'https://testwallet.icon.foundation/api/'
+* ```uri``` : URI of ICON API. The default value is 'https://testwallet.icon.foundation/api/', test net. You can use another URI of ICON API for various test net like Ethereum.
 
 * ```kwargs``` : (Optional) Reserved for the next version
 
@@ -279,7 +279,7 @@ Get the keystore file information and the balance.
 
 ### Arguments
 
-* ```uri``` : Uri of api. Default value is 'https://testwallet.icon.foundation/api/'
+* ```uri``` : URI of ICON API. The default value is 'https://testwallet.icon.foundation/api/', test net. You can use another URI of ICON API for various test net like Ethereum.
 
 ### Successful case
 
@@ -321,7 +321,7 @@ Get the balance of all addresses in the current wallet.
 
 ### Arguments
 
-* ```uri``` : Uri of api. Default value is 'https://testwallet.icon.foundation/api/'
+* ```uri``` : URI of ICON API. The default value is 'https://testwallet.icon.foundation/api/', test net. You can use another URI of ICON API for various test net like Ethereum.
 
 ### Successful case
 

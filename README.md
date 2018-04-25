@@ -3,7 +3,7 @@ ICON SDK for python
 
  ICON supports SDK for 3rd party or user services development.  You can integrate ICON SDK for your project and utilize ICON’s functionality.
 
- <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
  - [Prerequisite](#prerequisite)
  - [Version](#version)
  - [Glossary](#glossary)
@@ -49,6 +49,7 @@ ICON SDK for python
  		- [Arguments](#arguments)
  		- [Successful case](#successful-case)
  		- [Error cases](#error-cases)
+
 
 # Prerequisite
 

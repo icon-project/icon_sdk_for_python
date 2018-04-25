@@ -333,7 +333,7 @@ Ex) 1.10 icx => It will return 1,100,000,000,000,000,000.
 
 It will raise following exception.
 
-* AddressIsWrong : Address is wrong.
+* ```AddressIsWrong``` : Address is wrong.
 
 ## ```get_address()```
 

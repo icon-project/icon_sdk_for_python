@@ -15,16 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import base64
-import hashlib
-import re
-import time
-import os
-import codecs
-import json
+import base64, hashlib, re, time, os, codecs, json, certifi, requests
 from eth_keyfile import create_keyfile_json, extract_key_from_keyfile, load_keyfile
 from json import JSONDecodeError
-import requests
 from icx.custom_error import NotEnoughBalanceInWallet, AmountIsInvalid, AddressIsWrong, TransferFeeIsInvalid, \
     FeeIsBiggerThanAmount, NotAKeyStoreFile, AddressIsSame
 from icx.signer import IcxSigner
@@ -245,7 +238,8 @@ def create_jsonrpc_request_content(_id, method, params):
 
 def post(url, payload):
     try:
-        r = requests.post(url, json=payload, verify=False)
+        path = certifi.where()
+        r = requests.post(url, json=payload, verify=path)
         return r
     except requests.exceptions.Timeout:
         raise RuntimeError("Timeout happened. Check your internet connection status.")

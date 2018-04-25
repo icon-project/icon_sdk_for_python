@@ -13,13 +13,13 @@ ICON SDK for python
 - [Getting started](#getting-started)
 	- [Example](#example)
 - [Functions of wallet](#functions-of-wallet)
-	- [```create(password, file_path)```](#createpassword-filepath)
-	- [```open_wallet_from_file (password, file_path)```](#openwalletfromfile-password-filepath)
-	- [```transfer_value(wallet_info, to_address, value, password, fee=0, **kwargs )```](#transfervaluewalletinfo-toaddress-value-password-fee0-kwargs-)
-- [Functions of ```WalletInfo```](#functions-of-walletinfo)
-	- [```get_address_info()```](#getaddressinfo)
-	- [```get_balance()```](#getbalance)
-	- [```get_address()```](#getaddress)
+	- [```create_keystore_file_of_wallet(keystore_file_path, password)```]
+	- [```create_wallet_by_private_key (hex_private_key)```]
+	- [```open_keystore_file_of_wallet (keystore_file_path, password)```]
+	- [```transfer_value(password, to_address, value, fee=10000000000000000, uri, hex_private_key, **kwargs )```]
+	- [```get_address_info(uri)```]
+	- [```get_balance(uri)```]
+	- [```get_address()```]
 
 <!-- /TOC -->
 
@@ -29,7 +29,7 @@ ICON SDK for python
 
 # Version
 
-* 0.01 beta
+* 0.0.1 beta
 
 # Glossary
 
@@ -58,8 +58,6 @@ ex) hxaa688d74eb5f98b577883ca203535d2aa4f0838c
 
 * ```wallet``` : Capsulized functions of wallet
 
-* ```wallet.WalletInfo``` : Class to represent the information of wallet
-
 # Getting started
 
 ```shell
@@ -68,54 +66,65 @@ $ pip install icxapi
 
 ## Example
 ```python
-from icx import wallet
 
-# Create wallet.
-my_wallet_info = wallet.create(password = "as1v1$@1", file_path = “./key_folder/key.store” )
+from icx.wallet.wallet import Wallet
 
+# Create a keystore file of a wallet.
+my_wallet_1, _ = Wallet.create_keystore_file_of_wallet(keystore_file_path="./keystore.txt", password="test1234*")
+
+# Create a wallet by the private key.
+my_wallet_2, _ = Wallet.create_wallet_by_private_key(hex_private_key="")
+
+# Open the keystore file of the wallet.
+my_wallet_3, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path="./test_keystore_for_transfer.txt", password="ejfnvm1234*")
 
 # Get balance.
-balance = my_wallet_info.get_balance()
+balance = my_wallet_1.get_balance(uri="https://testwallet.icon.foundation/api/")
 
+# Get information of the wallet.
+wallet_info = my_wallet_1.get_wallet_info(uri="https://testwallet.icon.foundation/api/")
 
-# Transfer value 1.1 icx with 0.01 icx fee.
+# Get an address.
+wallet_address = my_wallet_1.get_address()
+
+# Transfer value 1010000000000000000 loop (1.01 icx) with 10000000000000000 loop (0.01 icx) fee.
 try:
-    result = wallet.transfer_value(
-        wallet_info = my_wallet_info,
-        password = “as1v1$@1”
-        to_address = ”hx2d76757c482857a099de21a9821ea973379f683d”,\
-        value = 1100000000000000000,\
-        fee   =   10000000000000000 \
-        )
-except AddressIsWrong:
-     print(f”Wallet address is wrong.”)
+    result = my_wallet_3.transfer_value(password="ejfnvm1234*", to_address="hx68bc6f60ea01bc033504a217631c601386be26b7", \
+                value="1010000000000000000", fee=10000000000000000)
+except PasswordIsNotAcceptable:
+    print(f"Password is not acceptable.")
 except PasswordIsWrong:
-     print(f”Wallet password is wrong.”)
+     print(f"Password is wrong.")
+except AddressIsWrong:
+     print(f"Wallet address is wrong.")
 except NotEnoughBalanceInWallet:
-     print(f”Balance is not enough.”)
+     print(f"Balance is not enough.")
 except TransferFeeIsInvalid:
-     print(f”Transfer fee is invalid.”)
-except TimestampIsNotCorrect:
-     print(f”Timestamp is not correct.”)
+     print(f"Transaction Fee is invalid. The fee should be 10000000000000000.")
+except FeeIsBiggerThanAmount:
+     print(f"Fee is bigger than transaction amount.")
+except AmountIsInvalid:
+     print(f"The amount you want to transfer is not valid.")
+except AddressIsSame:
+     print(f"Wallet address to transfer must be different from Wallet address to deposit.")
 
 ```
 
-
 # Functions of wallet
 
-## ```create(password, file_path)```
+## ```create_keystore_file_of_wallet(keystore_file_path, password)```
 
-Create a wallet file with given password and file path.
+create both a wallet and a keystore file with file path and given password.
 
 ### Arguments
 
-* ```password```: Password for the wallet. Password must include alphabet character, number, and  special character.
+* ```keystore_file_path``` : File path for the keystore file of the wallet.
 
-* ```file_path``` : File path for the keystore file of the wallet.
+* ```password```: Password for the wallet. Password must include alphabet character, number, and  special character.
 
 ### Successful case
 
-* Return : Instance of WalletInfo
+* Return : Instance of Wallet, private key
 
 ### Error cases
 
@@ -125,19 +134,37 @@ It will raise following exception.
 
 * ```FilePathIsWrong```: File path is wrong.
 
-## ```open_wallet_from_file (password, file_path)```
+## ```create_wallet_by_private_key(hex_private_key)```
 
-Open the created wallet file.
+create wallet without keystore file.
 
 ### Arguments
 
-* ```password``` : Password for the wallet in keystore file from file_path.
-
-* ```file_path``` : File path for the keystore file of the wallet.
+* ```hex_private_key``` : A private key in hexadecimal - 256 bits in hexadecimal is 32 bytes, or 64 characters in the range 0-9 or A-F. A tiny bit of code that is paired with a public key to set off algorithms to encrypt and decrypt a text for the specific address.
 
 ### Successful case
 
-* Return :  Instance of WalletInfo.
+* Return : Instance of Wallet, private key
+
+### Error cases
+
+It will raise following exception.
+
+* ```TypeError```
+
+## ```open_keystore_file_of_wallet(keystore_file_path, password)```
+
+Open the created keystore file and read the information of the file.
+
+### Arguments
+
+* ```keystore_file_path``` : File path for the keystore file of the wallet.
+
+* ```password```: Password for the wallet. Password must include alphabet character, number, and  special character.
+
+### Successful case
+
+* Return :  Instance of Wallet.
 
 ### Error cases
 
@@ -147,32 +174,33 @@ It will raise following exception.
 
 * ```FilePathIsWrong```: File path is wrong.
 
-## ```transfer_value(wallet_info, to_address, value, password, fee=0, **kwargs )```
+## ```transfer_value(self, password, to_address, value, fee=10000000000000000,
+                       uri='https://testwallet.icon.foundation/api/', hex_private_key=None, **kwargs):```
 
 Transfer the value from the given wallet to the specific address with the fee.
 
 ### Arguments
 
-* ```wallet_info``` : Instance of wallet class
+* ```password``` : Password for the wallet in keystore file used in open_wallet_from_file()
 
 * ```to_address```: Address of the wallet
 
 * ```value``` : Amount of money
 
-* ```password``` : Password for the wallet in keystore file used in open_wallet_from_file()
+* ```fee``` : Transfer fee (10000000000000000 loop)
 
-* ```fee``` : Transfer fee
+* ```uri``` : Uri of api. Default value is 'https://testwallet.icon.foundation/api/'
 
 * ```kwargs``` : (Optional) Reserved for the next version
 
 ### TIP
 
-* value and fee are integer with decimal point 10^18. Ex) 1.10 icx => 1.10 X 1,000,000,000,000,000,000 = 1,100,000,000,000,000,000.
+* value and fee are integer with decimal point 10^18. Ex) 1.10 icx => 1.10 X 1,000,000,000,000,000,000 = 1,100,000,000,000,000,000 loop.
 
 
 ### Successful case
 
-Return 0 : Succeed to transfer
+Return : response to transfer
 
 ### Error cases
 
@@ -188,11 +216,10 @@ It will raise following exception.
 
 * ```TimestampIsNotCorrect``` : Timestamp is not correct. (Adjust your computer’s time and date.)
 
-# Functions of ```WalletInfo```
 
-## ```get_address_info()```
+## ```get_wallet_info(uri)```
 
-Get the information of address.
+Get the keystore file information and the balance.
 
 ### Arguments
 
@@ -202,7 +229,7 @@ Get the information of address.
 
 Return dictionary with sub items like below.
 
-* ```ballance``` : the balance of this wallet
+* ```balance``` : the balance of this wallet
 
 * ```depositAddress```: the address of this wallet
 
@@ -232,7 +259,7 @@ It will raise following exception.
 
 * ```AddressIsWrong```: Address is wrong.
 
-## ```get_balance()```
+## ```get_balance(uri)```
 
 Get the balance of all addresses in the current wallet.
 

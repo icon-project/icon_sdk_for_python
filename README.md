@@ -174,8 +174,7 @@ It will raise following exception.
 
 * ```FilePathIsWrong```: File path is wrong.
 
-## ```transfer_value(self, password, to_address, value, fee=10000000000000000,
-                       uri='https://testwallet.icon.foundation/api/', hex_private_key=None, **kwargs):```
+## ```transfer_value(password, to_address, value, fee=10000000000000000, uri, hex_private_key=None, **kwargs)```
 
 Transfer the value from the given wallet to the specific address with the fee.
 
@@ -223,7 +222,7 @@ Get the keystore file information and the balance.
 
 ### Arguments
 
-* N/A
+* ```uri``` : Uri of api. Default value is 'https://testwallet.icon.foundation/api/'
 
 ### Successful case
 
@@ -265,7 +264,7 @@ Get the balance of all addresses in the current wallet.
 
 ### Arguments
 
-* N/A
+* ```uri``` : Uri of api. Default value is 'https://testwallet.icon.foundation/api/'
 
 ### Successful case
 

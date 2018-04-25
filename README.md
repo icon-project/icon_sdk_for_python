@@ -41,7 +41,7 @@ ICON SDK for python
         - [Arguments](#arguments)
         - [Successful case](#successful-case)
         - [Error cases](#error-cases)
-<!-- /TOC -->
+
 
 # Prerequisite
 
@@ -220,12 +220,6 @@ Transfer the value from the given wallet to the specific address with the fee.
 
 * Return : Response
 
-* ```response_code```: JSON RPC error code.
-* ```tx_hash```: Hash data of the result. Use icx_getTransactionResult to get the result.
-* ```id```: It MUST be the same as the value of the id member in the Request Object.
-
-    * If there was an error in detecting the id in the Request object (e.g. Parse error/Invalid Request), it MUST be Null.
-
 ``` json
 {
     "jsonrpc": "2.0",
@@ -236,10 +230,15 @@ Transfer the value from the given wallet to the specific address with the fee.
     "id":2
 }
 ```
+* ```response_code```: JSON RPC error code.
+* ```tx_hash```: Hash data of the result. Use icx_getTransactionResult to get the result.
+* ```id```: It MUST be the same as the value of the id member in the Request Object.
 
-
+    * If there was an error in detecting the id in the Request object (e.g. Parse error/Invalid Request), it MUST be Null.
 
 ### Unsuccessful case
+
+* Return : Response
 
 ```json
 {
@@ -307,7 +306,7 @@ Return dictionary with sub items like below.
 
 It will raise following exception.
 
-* ```AddressIsWrong```: Address is wrong.
+* ```AddressIsWrong``` : Address is wrong.
 
 ## ```get_balance(uri)```
 

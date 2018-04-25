@@ -1,4 +1,6 @@
 import json
+import urllib3
+urllib3.disable_warnings()
 from eth_keyfile import create_keyfile_json, decode_keyfile_json
 from icx.custom_error import PasswordIsNotAcceptable, FileExists, NoPermissionToWriteFile, FilePathIsWrong, \
     FilePathWithoutFileName, PasswordIsWrong
@@ -180,7 +182,7 @@ class Wallet:
         except ValueError:
             raise PasswordIsWrong
 
-    def get_wallet_info(self, uri):
+    def get_wallet_info(self, uri="https://testwallet.icon.foundation/api/"):
         """ get the keystore file information and the balance
 
             :param uri type(str)
@@ -191,7 +193,7 @@ class Wallet:
         self.wallet_info['balance'] = balance
         return self.wallet_info
 
-    def get_balance(self, uri):
+    def get_balance(self, uri="https://testwallet.icon.foundation/api/"):
         """ get the balance
 
             :param uri type(str)

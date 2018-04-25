@@ -3,24 +3,44 @@ ICON SDK for python
 
  ICON supports SDK for 3rd party or user services development.  You can integrate ICON SDK for your project and utilize ICON’s functionality.
 
-<!-- TOC depthFrom:1 depthTo:4 withLinks:1 updateOnSave:1 orderedList:0 -->
-
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 - [Prerequisite](#prerequisite)
 - [Version](#version)
 - [Glossary](#glossary)
 - [Technical information](#technical-information)
 - [Modules](#modules)
 - [Getting started](#getting-started)
-	- [Example](#example)
+    - [Example](#example)
+- [Create wallet.](#create-wallet)
+- [Get balance.](#get-balance)
+- [Transfer value 1.1 icx with 0.01 icx fee.](#transfer-value-11-icx-with-001-icx-fee)
 - [Functions of wallet](#functions-of-wallet)
-	- [```create_keystore_file_of_wallet(keystore_file_path, password)```]
-	- [```create_wallet_by_private_key (hex_private_key)```]
-	- [```open_keystore_file_of_wallet (keystore_file_path, password)```]
-	- [```transfer_value(password, to_address, value, fee=10000000000000000, uri, hex_private_key, **kwargs )```]
-	- [```get_address_info(uri)```]
-	- [```get_balance(uri)```]
-	- [```get_address()```]
-
+    - [```create(password, file_path)```](#createpassword-filepath)
+        - [Arguments](#arguments)
+        - [Successful case](#successful-case)
+        - [Error cases](#error-cases)
+    - [```open_wallet_from_file (password, file_path)```](#openwalletfromfile-password-filepath)
+        - [Arguments](#arguments)
+        - [Successful case](#successful-case)
+        - [Error cases](#error-cases)
+    - [```transfer_value(wallet_info, to_address, value, password, fee=0, **kwargs )```](#transfervaluewalletinfo-toaddress-value-password-fee0-kwargs-)
+        - [Arguments](#arguments)
+        - [TIP](#tip)
+        - [Successful case](#successful-case)
+        - [Error cases](#error-cases)
+- [Functions of ```WalletInfo```](#functions-of-walletinfo)
+    - [```get_address_info()```](#getaddressinfo)
+        - [Arguments](#arguments)
+        - [Successful case](#successful-case)
+        - [Error cases](#error-cases)
+    - [```get_balance()```](#getbalance)
+        - [Arguments](#arguments)
+        - [Successful case](#successful-case)
+        - [Error cases](#error-cases)
+    - [```get_address()```](#getaddress)
+        - [Arguments](#arguments)
+        - [Successful case](#successful-case)
+        - [Error cases](#error-cases)
 <!-- /TOC -->
 
 # Prerequisite
@@ -56,7 +76,7 @@ ex) hxaa688d74eb5f98b577883ca203535d2aa4f0838c
 
 # Modules
 
-* ```wallet``` : Capsulized functions of wallet
+* ```wallet``` : Package name of ICX wallet functions.
 
 # Getting started
 
@@ -87,7 +107,7 @@ wallet_info = my_wallet_1.get_wallet_info(uri="https://testwallet.icon.foundatio
 # Get an address.
 wallet_address = my_wallet_1.get_address()
 
-# Transfer value 1010000000000000000 loop (1.01 icx) with 10000000000000000 loop (0.01 icx) fee.
+# Transfer value 1,010,000,000,000,000,000 loop (1.01 icx) with 10,000,000,000,000,000 loop (0.01 icx) fee.
 try:
     result = my_wallet_3.transfer_value(password="ejfnvm1234*", to_address="hx68bc6f60ea01bc033504a217631c601386be26b7", \
                 value="1010000000000000000", fee=10000000000000000)
@@ -196,10 +216,41 @@ Transfer the value from the given wallet to the specific address with the fee.
 
 * value and fee are integer with decimal point 10^18. Ex) 1.10 icx => 1.10 X 1,000,000,000,000,000,000 = 1,100,000,000,000,000,000 loop.
 
-
 ### Successful case
 
-Return : response to transfer
+* Return : Response
+
+* ```response_code```: JSON RPC error code.
+* ```tx_hash```: Hash data of the result. Use icx_getTransactionResult to get the result.
+* ```id```: It MUST be the same as the value of the id member in the Request Object.
+
+    * If there was an error in detecting the id in the Request object (e.g. Parse error/Invalid Request), it MUST be Null.
+
+``` json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "response_code": 0,
+        "tx_hash": "4bf74e6aeeb43bde5dc8d5b62537a33ac8eb7605ebbdb51b015c1881b45b3aed"
+    },
+    "id":2
+}
+```
+
+
+
+### Unsuccessful case
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "message": "create tx message",
+        "response_code": -11
+    },
+    "id": 2
+}
+```
 
 ### Error cases
 

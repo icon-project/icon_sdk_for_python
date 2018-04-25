@@ -17,6 +17,7 @@
 
 import os
 import unittest
+import json
 from icx.custom_error import FilePathIsWrong, PasswordIsWrong, NotEnoughBalanceInWallet, TransferFeeIsInvalid, \
     AddressIsWrong, FeeIsBiggerThanAmount, AmountIsInvalid, AddressIsSame, PasswordIsNotAcceptable
 from icx.wallet.wallet import Wallet
@@ -246,7 +247,7 @@ class TestTransferValue(unittest.TestCase):
             ret = wallet2.transfer_value(
                 password, to_address="hx66425784bfddb5b430136b38268c3ce1fb68e8c5",
                 value="1000000000000000000", fee=10000000000000000)
-
+            print(ret.json())
         # Then
         except AmountIsInvalid:
             self.assertTrue(False)

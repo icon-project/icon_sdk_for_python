@@ -11,7 +11,7 @@ ICON SDK for python
  - [Modules](#modules)
  - [Getting started](#getting-started)
  	- [Example](#example)
-- [Functions of wallet](#functions-of-wallet)
+ - [Functions of wallet](#functions-of-wallet)
 	- [```create_keystore_file_of_wallet(keystore_file_path, password)```](#createkeystorefileofwalletkeystorefilepath-password)
 		- [Arguments](#arguments)
 		- [Successful case](#successful-case)

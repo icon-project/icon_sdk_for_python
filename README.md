@@ -80,7 +80,7 @@ ex) hxaa688d74eb5f98b577883ca203535d2aa4f0838c
 # Getting started
 
 ```shell
-$ pip install icxapi
+$ pip install iconsdk
 ```
 
 ## Example

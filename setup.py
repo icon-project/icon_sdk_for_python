@@ -32,8 +32,8 @@ except(IOError, ImportError):
 requires = ['requests==2.18.4', "eth-keyfile==0.5.0", "secp256k1==0.13.2", "certifi==2018.4.16", "pypandoc==1.4"]
 
 setup_options = {
-    'name': 'icon_sdk', 'version': find_version("icx", "__init__.py"),
-    'description': 'SDK of icon for python',
+    'name': 'iconsdk', 'version': find_version("icx", "__init__.py"),
+    'description': 'ICON SDK for python',
     'long_description': long_description,
     'author': 'ICON foundation',
     'author_email': 'foo@icon.foundation',

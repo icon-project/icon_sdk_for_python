@@ -1,3 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Copyright 2018 theloop Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import hashlib
 from secp256k1 import PrivateKey
 
@@ -31,21 +48,21 @@ class IcxSigner(object):
         return hashlib.sha3_256(public_key_bytes[1:]).digest()[-20:]
 
     def sign(self, msg_hash):
-        """Make a signature using the hash value of msg.
+        """ Make a signature using the hash value of msg.
 
         :param msg_hash: Result of sha3_256(msg) type(bytes)
-        :return:
-        Signature. type(bytes)
+
+        :return: Signature. type(bytes)
         """
         private_key_object = self.__private_key
         signature = private_key_object.ecdsa_sign(msg_hash, raw=True)
         return private_key_object.ecdsa_serialize(signature)
 
     def sign_recoverable(self, msg_hash):
-        """Make a recoverable signature using message hash data.
-        We can extract public key from recoverable signature.
+        """ Make a recoverable signature using message hash data. We can extract public key from recoverable signature.
 
         :param msg_hash: Hash data of message. type(bytes)
+
         :return:
         type(tuple)
         type(bytes): 65 bytes data , type(int): recovery id

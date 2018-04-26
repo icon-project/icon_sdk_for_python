@@ -3,25 +3,44 @@ ICON SDK for python
 
  ICON supports SDK for 3rd party or user services development.  You can integrate ICON SDK for your project and utilize ICON’s functionality.
 
-<!-- TOC depthFrom:1 depthTo:4 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-- [Prerequisite](#prerequisite)
-- [Version](#version)
-- [Glossary](#glossary)
-- [Technical information](#technical-information)
-- [Modules](#modules)
-- [Getting started](#getting-started)
-	- [Example](#example)
-- [Functions of wallet](#functions-of-wallet)
-	- [```create(password, file_path)```](#createpassword-filepath)
-	- [```open_wallet_from_file (password, file_path)```](#openwalletfromfile-password-filepath)
-	- [```transfer_value(wallet_info, to_address, value, password, fee=0, **kwargs )```](#transfervaluewalletinfo-toaddress-value-password-fee0-kwargs-)
-- [Functions of ```WalletInfo```](#functions-of-walletinfo)
-	- [```get_address_info()```](#getaddressinfo)
-	- [```get_balance()```](#getbalance)
-	- [```get_address()```](#getaddress)
-
-<!-- /TOC -->
+ - [Prerequisite](#prerequisite)
+ - [Version](#version)
+ - [Glossary](#glossary)
+ - [Technical information](#technical-information)
+ - [Modules](#modules)
+ - [Getting started](#getting-started)
+ 	- [Example](#example)
+ - [Functions of wallet](#functions-of-wallet)
+ 	- [create_keystore_file_of_wallet(keystore_file_path, password)](#createkeystorefileofwallet)
+ 		- [Arguments](#arguments)
+ 		- [Successful case](#successful-case)
+ 		- [Error cases](#error-cases)
+ 	- [create_wallet_by_private_key(hex_private_key)](#createwalletbyprivatekeyhexprivatekey)
+ 		- [Arguments](#arguments)
+ 		- [Successful case](#successful-case)
+ 		- [Error cases](#error-cases)
+ 	- [open_keystore_file_of_wallet(keystore_file_path, password)](#openkeystorefileofwalletkeystorefilepath-password)
+ 		- [Arguments](#arguments)
+ 		- [Successful case](#successful-case)
+ 		- [Error cases](#error-cases)
+ 	- [transfer_value(password, to_address, value, fee=10000000000000000, uri, hex_private_key=None, **kwargs)](#transfervaluepassword-toaddress-value-fee10000000000000000-uri-hexprivatekeynone-kwargs)
+ 		- [Arguments](#arguments)
+ 		- [TIP](#tip)
+ 		- [Successful case](#successful-case)
+ 		- [Unsuccessful case](#unsuccessful-case)
+ 		- [Error cases](#error-cases)
+ 	- [get_wallet_info(uri)](#getwalletinfouri)
+ 		- [Arguments](#arguments)
+ 		- [Successful case](#successful-case)
+ 		- [Error cases](#error-cases)
+ 	- [get_balance(uri)](#getbalanceuri)
+ 		- [Arguments](#arguments)
+ 		- [Successful case](#successful-case)
+ 		- [Error cases](#error-cases)
+ 	- [get_address()](#getaddress)
+ 		- [Arguments](#arguments)
+ 		- [Successful case](#successful-case)
+ 		- [Error cases](#error-cases)
 
 # Prerequisite
 
@@ -29,7 +48,7 @@ ICON SDK for python
 
 # Version
 
-* 0.01 beta
+* 0.0.1 beta
 
 # Glossary
 
@@ -56,9 +75,7 @@ ex) hxaa688d74eb5f98b577883ca203535d2aa4f0838c
 
 # Modules
 
-* ```wallet``` : Capsulized functions of wallet
-
-* ```wallet.WalletInfo``` : Class to represent the information of wallet
+* ```wallet``` : Package name of ICX wallet functions.
 
 # Getting started
 
@@ -68,54 +85,65 @@ $ pip install icxapi
 
 ## Example
 ```python
-from icx import wallet
 
-# Create wallet.
-my_wallet_info = wallet.create(password = "as1v1$@1", file_path = “./key_folder/key.store” )
+from icx.wallet.wallet import Wallet
 
+# Create a keystore file of a wallet.
+my_wallet_1, _ = Wallet.create_keystore_file_of_wallet(keystore_file_path="./keystore.txt", password="test1234*")
+
+# Create a wallet by the private key.
+my_wallet_2, _ = Wallet.create_wallet_by_private_key(hex_private_key="")
+
+# Open the keystore file of the wallet.
+my_wallet_3, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path="./test_keystore_for_transfer.txt", password="ejfnvm1234*")
 
 # Get balance.
-balance = my_wallet_info.get_balance()
+balance = my_wallet_1.get_balance(uri="https://testwallet.icon.foundation/api/")
 
+# Get information of the wallet.
+wallet_info = my_wallet_1.get_wallet_info(uri="https://testwallet.icon.foundation/api/")
 
-# Transfer value 1.1 icx with 0.01 icx fee.
+# Get an address.
+wallet_address = my_wallet_1.get_address()
+
+# Transfer value 1,010,000,000,000,000,000 loop (1.01 icx) with 10,000,000,000,000,000 loop (0.01 icx) fee.
 try:
-    result = wallet.transfer_value(
-        wallet_info = my_wallet_info,
-        password = “as1v1$@1”
-        to_address = ”hx2d76757c482857a099de21a9821ea973379f683d”,\
-        value = 1100000000000000000,\
-        fee   =   10000000000000000 \
-        )
-except AddressIsWrong:
-     print(f”Wallet address is wrong.”)
+    result = my_wallet_3.transfer_value(password="ejfnvm1234*", to_address="hx68bc6f60ea01bc033504a217631c601386be26b7", \
+                value="1010000000000000000", fee=10000000000000000)
+except PasswordIsNotAcceptable:
+    print(f"Password is not acceptable.")
 except PasswordIsWrong:
-     print(f”Wallet password is wrong.”)
+     print(f"Password is wrong.")
+except AddressIsWrong:
+     print(f"Wallet address is wrong.")
 except NotEnoughBalanceInWallet:
-     print(f”Balance is not enough.”)
+     print(f"Balance is not enough.")
 except TransferFeeIsInvalid:
-     print(f”Transfer fee is invalid.”)
-except TimestampIsNotCorrect:
-     print(f”Timestamp is not correct.”)
+     print(f"Transaction Fee is invalid. The fee should be 10000000000000000.")
+except FeeIsBiggerThanAmount:
+     print(f"Fee is bigger than transaction amount.")
+except AmountIsInvalid:
+     print(f"The amount you want to transfer is not valid.")
+except AddressIsSame:
+     print(f"Wallet address to transfer must be different from Wallet address to deposit.")
 
 ```
 
-
 # Functions of wallet
 
-## ```create(password, file_path)```
+## ```create_keystore_file_of_wallet(keystore_file_path, password)```
 
-Create a wallet file with given password and file path.
+create both a wallet and a keystore file with file path and given password.
 
 ### Arguments
 
-* ```password```: Password for the wallet. Password must include alphabet character, number, and  special character.
+* ```keystore_file_path``` : File path for the keystore file of the wallet.
 
-* ```file_path``` : File path for the keystore file of the wallet.
+* ```password```: Password for the wallet. Password must include alphabet character, number, and  special character.
 
 ### Successful case
 
-* Return : Instance of WalletInfo
+* Return : Instance of Wallet, private key
 
 ### Error cases
 
@@ -125,19 +153,37 @@ It will raise following exception.
 
 * ```FilePathIsWrong```: File path is wrong.
 
-## ```open_wallet_from_file (password, file_path)```
+## ```create_wallet_by_private_key(hex_private_key)```
 
-Open the created wallet file.
+create wallet without keystore file.
 
 ### Arguments
 
-* ```password``` : Password for the wallet in keystore file from file_path.
-
-* ```file_path``` : File path for the keystore file of the wallet.
+* ```hex_private_key``` : A private key in hexadecimal - 256 bits in hexadecimal is 32 bytes, or 64 characters in the range 0-9 or A-F. A tiny bit of code that is paired with a public key to set off algorithms to encrypt and decrypt a text for the specific address.
 
 ### Successful case
 
-* Return :  Instance of WalletInfo.
+* Return : Instance of Wallet, private key
+
+### Error cases
+
+It will raise following exception.
+
+* ```TypeError```
+
+## ```open_keystore_file_of_wallet(keystore_file_path, password)```
+
+Open the created keystore file and read the information of the file.
+
+### Arguments
+
+* ```keystore_file_path``` : File path for the keystore file of the wallet.
+
+* ```password```: Password for the wallet. Password must include alphabet character, number, and  special character.
+
+### Successful case
+
+* Return :  Instance of Wallet.
 
 ### Error cases
 
@@ -147,32 +193,62 @@ It will raise following exception.
 
 * ```FilePathIsWrong```: File path is wrong.
 
-## ```transfer_value(wallet_info, to_address, value, password, fee=0, **kwargs )```
+## ```transfer_value(password, to_address, value, fee=10000000000000000, uri, hex_private_key=None, **kwargs)```
 
 Transfer the value from the given wallet to the specific address with the fee.
 
 ### Arguments
 
-* ```wallet_info``` : Instance of wallet class
+* ```password``` : Password for the wallet in keystore file used in open_wallet_from_file()
 
 * ```to_address```: Address of the wallet
 
 * ```value``` : Amount of money
 
-* ```password``` : Password for the wallet in keystore file used in open_wallet_from_file()
+* ```fee``` : Transfer fee (10000000000000000 loop)
 
-* ```fee``` : Transfer fee
+* ```uri``` : URI of ICON API. The default value is 'https://testwallet.icon.foundation/api/', test net. You can use another URI of ICON API for various test net like Ethereum.
 
 * ```kwargs``` : (Optional) Reserved for the next version
 
 ### TIP
 
-* value and fee are integer with decimal point 10^18. Ex) 1.10 icx => 1.10 X 1,000,000,000,000,000,000 = 1,100,000,000,000,000,000.
-
+* value and fee are integer with decimal point 10^18. Ex) 1.10 icx => 1.10 X 1,000,000,000,000,000,000 = 1,100,000,000,000,000,000 loop.
 
 ### Successful case
 
-Return 0 : Succeed to transfer
+* Return : Response
+
+``` json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "response_code": 0,
+        "tx_hash": "4bf74e6aeeb43bde5dc8d5b62537a33ac8eb7605ebbdb51b015c1881b45b3aed"
+    },
+    "id":2
+}
+```
+* ```response_code```: JSON RPC error code.
+* ```tx_hash```: Hash data of the result. Use icx_getTransactionResult to get the result.
+* ```id```: It MUST be the same as the value of the id member in the Request Object.
+
+    * If there was an error in detecting the id in the Request object (e.g. Parse error/Invalid Request), it MUST be Null.
+
+### Unsuccessful case
+
+* Return : Response
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "message": "create tx message",
+        "response_code": -11
+    },
+    "id": 2
+}
+```
 
 ### Error cases
 
@@ -188,21 +264,20 @@ It will raise following exception.
 
 * ```TimestampIsNotCorrect``` : Timestamp is not correct. (Adjust your computer’s time and date.)
 
-# Functions of ```WalletInfo```
 
-## ```get_address_info()```
+## ```get_wallet_info(uri)```
 
-Get the information of address.
+Get the keystore file information and the balance.
 
 ### Arguments
 
-* N/A
+* ```uri``` : URI of ICON API. The default value is 'https://testwallet.icon.foundation/api/', test net. You can use another URI of ICON API for various test net like Ethereum.
 
 ### Successful case
 
 Return dictionary with sub items like below.
 
-* ```ballance``` : the balance of this wallet
+* ```balance``` : the balance of this wallet
 
 * ```depositAddress```: the address of this wallet
 
@@ -230,15 +305,15 @@ Return dictionary with sub items like below.
 
 It will raise following exception.
 
-* ```AddressIsWrong```: Address is wrong.
+* ```AddressIsWrong``` : Address is wrong.
 
-## ```get_balance()```
+## ```get_balance(uri)```
 
 Get the balance of all addresses in the current wallet.
 
 ### Arguments
 
-* N/A
+* ```uri``` : URI of ICON API. The default value is 'https://testwallet.icon.foundation/api/', test net. You can use another URI of ICON API for various test net like Ethereum.
 
 ### Successful case
 
@@ -249,7 +324,7 @@ Ex) 1.10 icx => It will return 1,100,000,000,000,000,000.
 
 It will raise following exception.
 
-* AddressIsWrong : Address is wrong.
+* ```AddressIsWrong``` : Address is wrong.
 
 ## ```get_address()```
 

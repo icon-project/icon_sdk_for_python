@@ -1,3 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Copyright 2018 theloop Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import json
 from eth_keyfile import create_keyfile_json, decode_keyfile_json
 from icx.custom_error import PasswordIsNotAcceptable, FileExists, NoPermissionToWriteFile, FilePathIsWrong, \
@@ -170,17 +187,14 @@ class Wallet:
             next(request_gen)
             response = request_gen.send(payload)
             return response
-
         except FileNotFoundError:
-            print("File does not exists.")
             raise FilePathIsWrong
         except IsADirectoryError:
-            print(f"{file_path} is a directory.")
             raise FilePathIsWrong
         except ValueError:
             raise PasswordIsWrong
 
-    def get_wallet_info(self, uri):
+    def get_wallet_info(self, uri="https://testwallet.icon.foundation/api/"):
         """ get the keystore file information and the balance
 
             :param uri type(str)
@@ -191,7 +205,7 @@ class Wallet:
         self.wallet_info['balance'] = balance
         return self.wallet_info
 
-    def get_balance(self, uri):
+    def get_balance(self, uri="https://testwallet.icon.foundation/api/"):
         """ get the balance
 
             :param uri type(str)

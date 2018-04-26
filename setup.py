@@ -21,12 +21,20 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
-requires = ['requests==2.18.4', "eth-keyfile==0.5.0", "secp256k1==0.13.2"]
+try:
+    import pypandoc
+    long_description = pypandoc.convert('README.md', 'rst')
+    long_description = long_description.replace("\r", "")  # YOU  NEED THIS LINE
+except(IOError, ImportError):
+    print("Pandoc not found. Long_description conversion failure.")
+    long_description = open('README.md').read()
+
+requires = ['requests==2.18.4', "eth-keyfile==0.5.0", "secp256k1==0.13.2", "certifi==2018.4.16", "pypandoc==1.4"]
 
 setup_options = {
-    'name': 'icon_sdk_for_python', 'version': find_version("icx", "__init__.py"),
+    'name': 'icon_sdk', 'version': find_version("icx", "__init__.py"),
     'description': 'SDK of icon for python',
-    'long_description': open('README.rst').read(),
+    'long_description': long_description,
     'author': 'ICON foundation',
     'author_email': 'foo@icon.foundation',
     'url': 'https://github.com/icon-project/icon_sdk_for_python',

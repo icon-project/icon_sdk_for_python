@@ -22,4 +22,4 @@ tests/keystore_file/test_keystore.txt
 
 build/
 dist/
-icon_sdk.egg-info/
+iconsdk.egg-info/

@@ -9,9 +9,6 @@
 ### Removed
 N/A
 
-
-# Changelog
-
 ## [0.0.1] - April 26, 2018
 ### Added
  - Initialize version.

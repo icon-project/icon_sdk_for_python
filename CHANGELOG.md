@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.4] - June 12, 2018
+### Added
+N/A
+
+### Changed
+ - Changed import rule
+
+### Removed
+N/A
+
+# Changelog
+
 ## [0.0.3] - April 27, 2018
 ### Added
 N/A

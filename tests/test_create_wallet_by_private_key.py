@@ -16,7 +16,7 @@
 # limitations under the License.
 
 import unittest
-from icx.wallet.wallet import Wallet
+from icx.wallet import Wallet
 
 
 class TestCreateWalletByPrivateKey(unittest.TestCase):

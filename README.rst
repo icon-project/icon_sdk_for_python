@@ -120,7 +120,7 @@ Example
 .. code:: python
 
 
-    from icx.wallet.wallet import Wallet
+    from icx.wallet import Wallet
 
     # Create a keystore file of a wallet.
     my_wallet_1, _ = Wallet.create_keystore_file_of_wallet(keystore_file_path="./keystore.txt", password="test1234*")

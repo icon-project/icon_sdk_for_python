@@ -17,7 +17,7 @@
 
 import os
 import unittest
-from icx.wallet.wallet import Wallet
+from icx.wallet import Wallet
 from icx.utils import change_hex_balance_to_decimal_balance
 
 TEST_DIR = os.path.dirname(os.path.abspath("tests/keystore_file/not_a_key_store_file.txt"))

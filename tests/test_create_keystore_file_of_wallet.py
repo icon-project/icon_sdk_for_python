@@ -17,7 +17,7 @@
 
 import unittest
 import os
-from icx.wallet.wallet import Wallet
+from icx.wallet import Wallet
 from icx.custom_error import FilePathIsWrong, PasswordIsNotAcceptable, NoPermissionToWriteFile, FileExists, NotAKeyStoreFile
 from icx.utils import validate_key_store_file
 

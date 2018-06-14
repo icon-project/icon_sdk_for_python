@@ -22,7 +22,8 @@ from icx.custom_error import PasswordIsNotAcceptable, FileExists, NoPermissionTo
 from icx.utils import validate_password, create_jsonrpc_request_content, \
         store_wallet, validate_key_store_file, read_wallet, \
         get_balance, validate_address, validate_address_is_not_same, check_amount_and_fee_is_valid, make_params, \
-        request_generator, get_balance_after_trasfer, check_balance_enough, key_from_key_store
+        request_generator, get_balance_after_trasfer, check_balance_enough, key_from_key_store, \
+        get_last_block, get_block_by_hash, get_block_by_height
 from icx.signer import IcxSigner
 
 
@@ -220,4 +221,35 @@ class Wallet:
         """
         return self.address
 
+    @staticmethod
+    def get_block_by_height(height, uri="https://testwallet.icon.foundation/api/"):
+        """ get block information by height
+
+        :param height:
+        :param uri type(str)
+        :return:
+        """
+        block = get_block_by_height(height, uri)
+        return block
+
+    @staticmethod
+    def get_block_by_hash(hash, uri="https://testwallet.icon.foundation/api/"):
+        """ get block information by hash
+
+        :param hash:
+        :param uri:
+        :return:
+        """
+        block = get_block_by_hash(hash, uri)
+        return block
+
+    @staticmethod
+    def get_last_block(uri="https://testwallet.icon.foundation/api/"):
+        """ get last block information
+
+        :param uri:
+        :return:
+        """
+        last_block = get_last_block(uri)
+        return last_block
 

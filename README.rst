@@ -63,6 +63,21 @@ integrate ICON SDK for your project and utilize ICON’s functionality.
       -  `Successful case <#successful-case>`__
       -  `Error cases <#error-cases>`__
 
+   -  `get_block_by_hash(hash) <#getblockbyhashhash>`__
+
+      -  `Arguments <#arguments>`__
+      -  `Successful case <#successful-case>`__
+
+   -  `get_block_by_height(height) <#getblockbyheightheight>`__
+
+      -  `Arguments <#arguments>`__
+      -  `Successful case <#successful-case>`__
+
+   -  `get_last_block() <#getlastblock>`__
+
+      -  `Arguments <#arguments>`__
+      -  `Successful case <#successful-case>`__
+
 Prerequisite
 ============
 
@@ -71,7 +86,7 @@ Prerequisite
 Version
 =======
 
--  0.0.4 beta
+-  0.0.5 beta
 
 Glossary
 ========
@@ -139,6 +154,15 @@ Example
 
     # Get an address.
     wallet_address = my_wallet_1.get_address()
+
+    # Get block information by hash.
+    block1 = Wallet.get_block_by_hash('885b8021826f7e741be7f53bb95b48221e9ab263f377e997b2e47a7b8f4a2a8b')
+
+    # Get block information by height.
+    block2 = Wallet.get_block_by_height(1)
+
+    # Get last block information.
+    last_block = Wallet.get_last_block()
 
     # Transfer value 1,010,000,000,000,000,000 loop (1.01 icx) with 10,000,000,000,000,000 loop (0.01 icx) fee.
     try:
@@ -470,3 +494,61 @@ Error cases
 It will raise following exception.
 
 -  ``AddressIsWrong`` : Address is wrong.
+
+``get_block_by_hash(hash)``
+-----------------
+
+Get the block information by hash.
+
+.. _arguments-7:
+
+Arguments
+~~~~~~~~~
+
+-  ``hash`` : Using hash values ​​with electronic signatures. 64 character. hexadecimal.
+
+.. _successful-case-7:
+
+Successful case
+~~~~~~~~~~~~~~~
+
+-  Return dictionary of the block information.
+
+``get_block_by_height(height)``
+-----------------
+
+Get the block information by height.
+
+.. _arguments-8:
+
+Arguments
+~~~~~~~~~
+
+-  ``height`` : block's height
+
+.. _successful-case-8:
+
+Successful case
+~~~~~~~~~~~~~~~
+
+-  Return dictionary of the block information.
+
+``get_last_block()``
+-----------------
+
+Get the block information by hash.
+
+.. _arguments-9:
+
+Arguments
+~~~~~~~~~
+
+-  N/A
+
+.. _successful-case-9:
+
+Successful case
+~~~~~~~~~~~~~~~
+
+-  Return dictionary of the last block information.
+

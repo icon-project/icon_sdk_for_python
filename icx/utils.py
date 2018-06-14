@@ -395,6 +395,61 @@ def get_balance(address, url):
     return dec_loop_balance
 
 
+def get_block_by_hash(hash, url):
+    """ Get block information by hash.
+
+    :param hash: Using hash values ​​with electronic signatures. 64 character. hexadecimal.
+    :param url:
+    :return:
+    """
+    url = f'{url}v2'
+
+    method = 'icx_getBlockByHash'
+    params = {'hash': hash}
+    payload = create_jsonrpc_request_content(0, method, params)
+    response = post(url, payload)
+    content = response.json()
+    package_json_contents = json.dumps(content, indent=4)
+
+    return package_json_contents
+
+
+def get_block_by_height(height, url):
+    """ Get block information by height.
+
+    :param height: block's height
+    :param url:
+    :return:
+    """
+    url = f'{url}v2'
+
+    method = 'icx_getBlockByHeight'
+    params = {'height': height}
+    payload = create_jsonrpc_request_content(0, method, params)
+    response = post(url, payload)
+    content = response.json()
+    package_json_contents = json.dumps(content, indent=4)
+
+    return package_json_contents
+
+
+def get_last_block(url):
+    """ Get last block information.
+
+    :param url:
+    :return:
+    """
+    url = f'{url}v2'
+
+    method = 'icx_getLastBlock'
+    params = {}
+    payload = create_jsonrpc_request_content(0, method, params)
+    response = post(url, payload)
+    content = response.json()
+    package_json_contents = json.dumps(content, indent=4)
+    return package_json_contents
+
+
 def read_wallet(file_path):
     """Read keystore file
 

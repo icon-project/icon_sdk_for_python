@@ -110,6 +110,34 @@ def validate_wallet_info(wallet_info: dict) -> bool:
     return is_valid
 
 
+def validate_block(response_json: dict) -> bool:
+    """ Check the response json of the block has right format.
+
+    :param response_json
+    :return: bool
+    """
+    inner_key_name_of_block = ["version", "prev_block_hash","merkle_tree_root_hash","time_stamp","confirmed_transaction_list"]
+    is_valid = response_json["result"]["response_code"] is 0 and \
+               has_keys(response_json["result"]["block"], inner_key_name_of_block)
+    return is_valid
+
+
+def validate_last_block(response_json: dict) -> bool:
+    """ Check the response json of the last block has right format.
+
+    :param response_json
+    :return: bool
+    """
+    inner_key_name_of_result = ["response_code", "block"]
+    inner_key_name_of_block = ["version", "prev_block_hash", "merkle_tree_root_hash", "time_stamp", \
+                               "confirmed_transaction_list", "block_hash", "height", "peer_id", "signature"]
+
+    is_valid = response_json["result"]["response_code"] is 0 and \
+               has_keys(response_json["result"], inner_key_name_of_result) and \
+               has_keys(response_json["result"]["block"], inner_key_name_of_block)
+    return is_valid
+
+
 def has_keys(dict_data, key_array):
     for key in key_array:
         if key in dict_data.keys():
@@ -378,7 +406,7 @@ def get_balance(address, url):
     """ Get balance of the address indicated by address.
 
     :param address: icx account address starting with 'hx'
-    :param url:
+    :param url: api target url
 
     :return: icx
     """
@@ -399,8 +427,9 @@ def get_block_by_hash(hash, url):
     """ Get block information by hash.
 
     :param hash: Using hash values ​​with electronic signatures. 64 character. hexadecimal.
-    :param url:
-    :return:
+    :param url: api target url
+
+    :return: response result(json)
     """
     url = f'{url}v2'
 
@@ -408,18 +437,17 @@ def get_block_by_hash(hash, url):
     params = {'hash': hash}
     payload = create_jsonrpc_request_content(0, method, params)
     response = post(url, payload)
-    content = response.json()
-    package_json_contents = json.dumps(content, indent=4)
-
-    return package_json_contents
+    json_response = response.json()
+    return json_response
 
 
 def get_block_by_height(height, url):
     """ Get block information by height.
 
     :param height: block's height
-    :param url:
-    :return:
+    :param url: api target url
+
+    :return: response result(json)
     """
     url = f'{url}v2'
 
@@ -427,17 +455,16 @@ def get_block_by_height(height, url):
     params = {'height': height}
     payload = create_jsonrpc_request_content(0, method, params)
     response = post(url, payload)
-    content = response.json()
-    package_json_contents = json.dumps(content, indent=4)
-
-    return package_json_contents
+    json_response = response.json()
+    return json_response
 
 
 def get_last_block(url):
     """ Get last block information.
 
-    :param url:
-    :return:
+    :param url: api target url
+
+    :return: response result(json)
     """
     url = f'{url}v2'
 
@@ -445,9 +472,8 @@ def get_last_block(url):
     params = {}
     payload = create_jsonrpc_request_content(0, method, params)
     response = post(url, payload)
-    content = response.json()
-    package_json_contents = json.dumps(content, indent=4)
-    return package_json_contents
+    json_response = response.json()
+    return json_response
 
 
 def read_wallet(file_path):

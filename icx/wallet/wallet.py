@@ -221,8 +221,8 @@ class Wallet:
         """
         return self.address
 
-    @staticmethod
-    def get_block_by_height(height, uri="https://testwallet.icon.foundation/api/"):
+    @classmethod
+    def get_block_by_height(cls, height, uri="https://testwallet.icon.foundation/api/"):
         """ get block information by height
 
         :param height:
@@ -232,8 +232,8 @@ class Wallet:
         block = get_block_by_height(height, uri)
         return block
 
-    @staticmethod
-    def get_block_by_hash(hash, uri="https://testwallet.icon.foundation/api/"):
+    @classmethod
+    def get_block_by_hash(cls, hash, uri="https://testwallet.icon.foundation/api/"):
         """ get block information by hash
 
         :param hash:
@@ -243,8 +243,8 @@ class Wallet:
         block = get_block_by_hash(hash, uri)
         return block
 
-    @staticmethod
-    def get_last_block(uri="https://testwallet.icon.foundation/api/"):
+    @classmethod
+    def get_last_block(cls, uri="https://testwallet.icon.foundation/api/"):
         """ get last block information
 
         :param uri:

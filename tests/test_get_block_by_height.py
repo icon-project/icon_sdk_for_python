@@ -17,6 +17,7 @@
 
 import unittest, json
 from icx.wallet import Wallet
+from icx.utils import validate_block
 
 
 class TestGetBlockByHeight(unittest.TestCase):
@@ -25,7 +26,9 @@ class TestGetBlockByHeight(unittest.TestCase):
         """ Case to get block by Height successfully
         """
         # Given, When
-        block = Wallet.get_block_by_height(1)
+        block = Wallet.get_block_by_height(10)
 
         # Then
-        self.assertEqual(0, json.loads(block)["result"]['response_code'])
+        self.assertTrue(validate_block(block))
+
+

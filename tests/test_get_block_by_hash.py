@@ -17,6 +17,7 @@
 
 import unittest, json
 from icx.wallet import Wallet
+from icx.utils import validate_block
 
 
 class TestGetBlockByHash(unittest.TestCase):
@@ -28,4 +29,4 @@ class TestGetBlockByHash(unittest.TestCase):
         block = Wallet.get_block_by_hash('885b8021826f7e741be7f53bb95b48221e9ab263f377e997b2e47a7b8f4a2a8b')
 
         # Then
-        self.assertEqual(0, json.loads(block)["result"]['response_code'])
+        self.assertTrue(validate_block(block))

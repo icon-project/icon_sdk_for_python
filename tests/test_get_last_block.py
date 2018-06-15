@@ -17,6 +17,7 @@
 
 import unittest, json
 from icx.wallet import Wallet
+from icx.utils import validate_last_block
 
 
 class TestGetLastBlock(unittest.TestCase):
@@ -28,4 +29,5 @@ class TestGetLastBlock(unittest.TestCase):
         block = Wallet.get_last_block()
 
         # Then
-        self.assertEqual(0, json.loads(block)["result"]['response_code'])
+        self.assertTrue(validate_last_block(block))
+

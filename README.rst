@@ -16,67 +16,28 @@ integrate ICON SDK for your project and utilize ICON’s functionality.
 -  `Functions of wallet <#functions-of-wallet>`__
 
    -  `create_keystore_file_of_wallet(keystore_file_path,
-      password) <#createkeystorefileofwallet>`__
+      password) <#create-keystore-file-of-wallet>`__
 
-      -  `Arguments <#arguments>`__
-      -  `Successful case <#successful-case>`__
-      -  `Error cases <#error-cases>`__
-
-   -  `create_wallet_by_private_key(hex_private_key) <#createwalletbyprivatekeyhexprivatekey>`__
-
-      -  `Arguments <#arguments>`__
-      -  `Successful case <#successful-case>`__
-      -  `Error cases <#error-cases>`__
+   -  `create_wallet_by_private_key(hex_private_key) <#create_wallet_by_private_key>`__
 
    -  `open_keystore_file_of_wallet(keystore_file_path,
-      password) <#openkeystorefileofwalletkeystorefilepath-password>`__
-
-      -  `Arguments <#arguments>`__
-      -  `Successful case <#successful-case>`__
-      -  `Error cases <#error-cases>`__
+      password) <#open-keystore-file-of-wallet>`__
 
    -  `transfer_value(password, to_address, value,
       fee=10000000000000000, uri, hex_private_key=None,
-      \**kwargs) <#transfervaluepassword-toaddress-value-fee10000000000000000-uri-hexprivatekeynone-kwargs>`__
+      \**kwargs) <#transfer-value>`__
 
-      -  `Arguments <#arguments>`__
-      -  `TIP <#tip>`__
-      -  `Successful case <#successful-case>`__
-      -  `Unsuccessful case <#unsuccessful-case>`__
-      -  `Error cases <#error-cases>`__
+   -  `get_wallet_info(uri) <#get-wallet-info>`__
 
-   -  `get_wallet_info(uri) <#getwalletinfouri>`__
+   -  `get_balance(uri) <#get-balance>`__
 
-      -  `Arguments <#arguments>`__
-      -  `Successful case <#successful-case>`__
-      -  `Error cases <#error-cases>`__
+   -  `get_address() <#get-address>`__
 
-   -  `get_balance(uri) <#getbalanceuri>`__
+   -  `get_block_by_hash(hash) <#get-block-by-hash>`__
 
-      -  `Arguments <#arguments>`__
-      -  `Successful case <#successful-case>`__
-      -  `Error cases <#error-cases>`__
+   -  `get_block_by_height(height) <#get-block-by-height>`__
 
-   -  `get_address() <#getaddress>`__
-
-      -  `Arguments <#arguments>`__
-      -  `Successful case <#successful-case>`__
-      -  `Error cases <#error-cases>`__
-
-   -  `get_block_by_hash(hash) <#getblockbyhashhash>`__
-
-      -  `Arguments <#arguments>`__
-      -  `Successful case <#successful-case>`__
-
-   -  `get_block_by_height(height) <#getblockbyheightheight>`__
-
-      -  `Arguments <#arguments>`__
-      -  `Successful case <#successful-case>`__
-
-   -  `get_last_block() <#getlastblock>`__
-
-      -  `Arguments <#arguments>`__
-      -  `Successful case <#successful-case>`__
+   -  `get_last_block() <#get_last_block>`__
 
 Prerequisite
 ============
@@ -125,15 +86,15 @@ Modules
 Getting started
 ===============
 
-.. code:: shell
+.. code:: bash
 
     $ pip install iconsdk
+
 
 Example
 -------
 
 .. code:: python
-
 
     from icx.wallet import Wallet
 
@@ -188,8 +149,13 @@ Example
 Functions of wallet
 ===================
 
-``create_keystore_file_of_wallet(keystore_file_path, password)``
-----------------------------------------------------------------
+create_keystore_file_of_wallet
+-------------------------------
+
+.. code:: python
+
+    create_keystore_file_of_wallet
+
 
 create both a wallet and a keystore file with file path and given
 password.
@@ -221,8 +187,13 @@ It will raise following exception.
 
 -  ``FilePathIsWrong``: File path is wrong.
 
-``create_wallet_by_private_key(hex_private_key)``
+create_keystore_file_of_wallet
 -------------------------------------------------
+
+.. code:: python
+
+    create_wallet_by_private_key(hex_private_key)
+
 
 create wallet without keystore file.
 
@@ -252,8 +223,12 @@ It will raise following exception.
 
 -  ``TypeError``
 
-``open_keystore_file_of_wallet(keystore_file_path, password)``
+open_keystore_file_of_wallet
 --------------------------------------------------------------
+
+.. code:: python
+
+   open_keystore_file_of_wallet(keystore_file_path, password)
 
 Open the created keystore file and read the information of the file.
 
@@ -286,8 +261,12 @@ It will raise following exception.
 
 -  ``FilePathIsWrong``: File path is wrong.
 
-``transfer_value(password, to_address, value, fee=10000000000000000, uri, hex_private_key=None, **kwargs)``
------------------------------------------------------------------------------------------------------------
+transfer_value
+---------------------------
+
+.. code:: python
+
+  transfer_value(password, to_address, value, fee=10000000000000000, uri, hex_private_key=None, **kwargs)
 
 Transfer the value from the given wallet to the specific address with
 the fee.
@@ -380,8 +359,12 @@ It will raise following exception.
 -  ``TimestampIsNotCorrect`` : Timestamp is not correct. (Adjust your
    computer’s time and date.)
 
-``get_wallet_info(uri)``
-------------------------
+get_wallet_info
+--------------------------
+
+.. code:: python
+
+  get_wallet_info(uri)
 
 Get the keystore file information and the balance.
 
@@ -436,8 +419,13 @@ It will raise following exception.
 
 -  ``AddressIsWrong`` : Address is wrong.
 
-``get_balance(uri)``
---------------------
+get_balance
+-----------------------
+
+.. code:: python
+
+   get_balance(uri)
+
 
 Get the balance of all addresses in the current wallet.
 
@@ -467,8 +455,12 @@ It will raise following exception.
 
 -  ``AddressIsWrong`` : Address is wrong.
 
-``get_address()``
------------------
+get_address
+------------
+
+.. code:: python
+
+    get_address()
 
 Get the address of wallet.
 
@@ -495,17 +487,24 @@ It will raise following exception.
 
 -  ``AddressIsWrong`` : Address is wrong.
 
-``get_block_by_hash(hash)``
------------------
+
+get_block_by_hash
+-----------------------------
+
+.. code:: python
+
+   get_block_by_hash(hash)
+
 
 Get the block information by hash.
+
 
 .. _arguments-7:
 
 Arguments
 ~~~~~~~~~
 
--  ``hash`` : Using hash values ​​with electronic signatures. 64 character. hexadecimal.
+-  ``hash``: Using hash values ​​with electronic signatures. 64 character. hexadecimal.
 
 .. _successful-case-7:
 
@@ -514,8 +513,13 @@ Successful case
 
 -  Return dictionary of the block information.
 
-``get_block_by_height(height)``
------------------
+get_block_by_height
+---------------------------------
+
+.. code:: python
+
+    get_block_by_height(height)
+
 
 Get the block information by height.
 
@@ -533,8 +537,13 @@ Successful case
 
 -  Return dictionary of the block information.
 
-``get_last_block()``
------------------
+get_last_block
+---------------------
+
+.. code:: python
+
+    get_last_block()
+
 
 Get the block information by hash.
 
@@ -551,4 +560,3 @@ Successful case
 ~~~~~~~~~~~~~~~
 
 -  Return dictionary of the last block information.
-

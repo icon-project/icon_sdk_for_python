@@ -71,7 +71,7 @@ Prerequisite
 Version
 =======
 
--  0.0.4 beta
+-  0.0.5 beta
 
 Glossary
 ========
@@ -291,8 +291,11 @@ Arguments
 TIP
 ~~~
 
--  value and fee are integer with decimal point 10^18. Ex) 1.10 icx =>
+-  ``value`` and ``fee`` are integer with decimal point 10^18. Ex) 1.10 icx =>
    1.10 X 1,000,000,000,000,000,000 = 1,100,000,000,000,000,000 loop.
+
+-  Need to wait for a while after transfer value. Because it takes time to make consensus among nodes. We recommend 0.3 sec at least.
+
 
 .. _successful-case-3:
 

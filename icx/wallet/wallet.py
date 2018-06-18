@@ -29,8 +29,8 @@ from icx.signer import IcxSigner
 class Wallet:
 
     def __init__(self, wallet_data: dict=None, public_key=None, uri="https://testwallet.icon.foundation/api/", address: str=None):
-        self.__wallet_info = wallet_data if wallet_data else wallet_data
-        self.__address = self.__wallet_info["address"] if wallet_data else address          # an address of the wallet
+        self.__wallet_info = wallet_data
+        self.__address = self.__wallet_info["address"]                                      # an address of the wallet
         self.__public_key = public_key                                                      # a public key of the wallet
         self.__uri = uri                                                                    # a target uri for api
 
@@ -101,25 +101,24 @@ class Wallet:
             raise FilePathWithoutFileName
 
     @staticmethod
-    def create_wallet_by_private_key(hex_private_key=None):
+    def create_wallet_by_private_key(password, hex_private_key=None):
         """ create wallet without keystore file
 
            :param hex_private_key: the private key with a hexadecimal number
+           :param password
 
            :return: Instance of Wallet class.
            """
-        byte_private_key, is_byte = None, None
-
-        if hex_private_key:
-            byte_private_key = bytes.fromhex(hex_private_key)
-            is_byte = True
 
         try:
 
-            signer = IcxSigner(byte_private_key, is_byte)
+            signer = IcxSigner(bytes.fromhex(hex_private_key) if hex_private_key else None, True if hex_private_key else None)
 
-            wallet = Wallet()
-            wallet.address = "hx" + signer.address.hex()
+            key_store_contents = create_keyfile_json(signer.private_key_bytes, bytes(password, 'utf-8'), iterations=262144)
+            key_store_contents['address'] = "hx" + signer.address.hex()
+            key_store_contents['coinType'] = 'icx'
+
+            wallet = Wallet(key_store_contents)
 
             return_value = (wallet, signer.private_key_bytes.hex())
             return return_value
@@ -213,6 +212,7 @@ class Wallet:
             :return wallet information. type(dict)
         """
         balance = get_balance(self.address, uri)
+
         return balance
 
     def get_address(self):

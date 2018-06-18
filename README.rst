@@ -127,7 +127,7 @@ Example
     my_wallet_1, _ = Wallet.create_keystore_file_of_wallet(keystore_file_path="./keystore.txt", password="test1234*")
 
     # Create a wallet by the private key.
-    my_wallet_2, _ = Wallet.create_wallet_by_private_key(password, hex_private_key="")
+    my_wallet_2, _ = Wallet.create_wallet_by_private_key(password="test1234*", hex_private_key="")
 
     # Open the keystore file of the wallet.
     my_wallet_3, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path="./test_keystore_for_transfer.txt", password="ejfnvm1234*")

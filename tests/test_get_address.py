@@ -29,7 +29,7 @@ class TestGetAddress(unittest.TestCase):
         """ Case to verify the wallet address from the wallet generated from private key
         """
         # Given, When
-        wallet, _ = Wallet.create_wallet_by_private_key('71fc378d3a3fb92b57474af156f376711a8a89d277c9b60a923a1db75575b1cc')
+        wallet, _ = Wallet.create_wallet_by_private_key('Adas21312*', '71fc378d3a3fb92b57474af156f376711a8a89d277c9b60a923a1db75575b1cc')
 
         # Then
         self.assertEqual(wallet.get_address(), "hxcc7b1f5fb98ca1eeaf9586bc08048814cb0d4d3d")

@@ -22,7 +22,8 @@ integrate ICON SDK for your project and utilize ICON’s functionality.
       -  `Successful case <#successful-case>`__
       -  `Error cases <#error-cases>`__
 
-   -  `create_wallet_by_private_key(hex_private_key) <#createwalletbyprivatekeyhexprivatekey>`__
+   -  `create_wallet_by_private_key(password,
+      hex_private_key) <#createwalletbyprivatekeypassword-hexprivatekey>`__
 
       -  `Arguments <#arguments>`__
       -  `Successful case <#successful-case>`__
@@ -71,7 +72,7 @@ Prerequisite
 Version
 =======
 
--  0.0.4 beta
+-  0.0.5 beta
 
 Glossary
 ========
@@ -126,7 +127,7 @@ Example
     my_wallet_1, _ = Wallet.create_keystore_file_of_wallet(keystore_file_path="./keystore.txt", password="test1234*")
 
     # Create a wallet by the private key.
-    my_wallet_2, _ = Wallet.create_wallet_by_private_key(hex_private_key="")
+    my_wallet_2, _ = Wallet.create_wallet_by_private_key(password="test1234*", hex_private_key="")
 
     # Open the keystore file of the wallet.
     my_wallet_3, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path="./test_keystore_for_transfer.txt", password="ejfnvm1234*")
@@ -197,7 +198,7 @@ It will raise following exception.
 
 -  ``FilePathIsWrong``: File path is wrong.
 
-``create_wallet_by_private_key(hex_private_key)``
+``create_wallet_by_private_key(password, hex_private_key)``
 -------------------------------------------------
 
 create wallet without keystore file.
@@ -211,6 +212,9 @@ Arguments
    hexadecimal is 32 bytes, or 64 characters in the range 0-9 or A-F. A
    tiny bit of code that is paired with a public key to set off
    algorithms to encrypt and decrypt a text for the specific address.
+
+-  ``password``: Password for the wallet. Password must include alphabet
+   character, number, and special character.
 
 .. _successful-case-1:
 
@@ -291,8 +295,11 @@ Arguments
 TIP
 ~~~
 
--  value and fee are integer with decimal point 10^18. Ex) 1.10 icx =>
+-  ``value`` and ``fee`` are integer with decimal point 10^18. Ex) 1.10 icx =>
    1.10 X 1,000,000,000,000,000,000 = 1,100,000,000,000,000,000 loop.
+
+-  Need to wait for a while after transfer value. Because it takes time to make consensus among nodes. We recommend 0.3 sec at least.
+
 
 .. _successful-case-3:
 

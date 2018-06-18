@@ -1,5 +1,17 @@
 # Changelog
 
+
+## [0.0.5] - June 18, 2018
+### Added
+N/A
+
+### Changed
+ - Fix issue: create_wallet_by_private_key() returned the wallet object without the data.
+
+### Removed
+N/A
+
+
 ## [0.0.4] - June 12, 2018
 ### Added
 N/A

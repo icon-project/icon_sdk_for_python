@@ -18,7 +18,7 @@ integrate ICON SDK for your project and utilize ICON’s functionality.
    -  `create_keystore_file_of_wallet(keystore_file_path,
       password) <#create-keystore-file-of-wallet>`__
 
-   -  `create_wallet_by_private_key(password, hex_private_key) <#create_wallet_by_private_key>`__
+   -  `create_wallet_by_private_key(password, hex_private_key) <#create-wallet-by-private-key>`__
 
    -  `open_keystore_file_of_wallet(keystore_file_path,
       password) <#open-keystore-file-of-wallet>`__
@@ -187,7 +187,7 @@ It will raise following exception.
 
 -  ``FilePathIsWrong``: File path is wrong.
 
-``create_wallet_by_private_key(password, hex_private_key)``
+create_wallet_by_private_key
 -------------------------------------------------
 
 .. code:: python

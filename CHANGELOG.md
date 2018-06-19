@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.5] - June 12, 2018
+### Added
+ - get block by hash
+ - get block by height
+ - get last block
+ 
+### Changed
+N/A
+
+### Removed
+N/A
+
+# Changelog
+
 ## [0.0.4] - June 12, 2018
 ### Added
 N/A

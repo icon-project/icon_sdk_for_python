@@ -21,6 +21,7 @@ from icx.custom_error import FilePathIsWrong, PasswordIsWrong, NotEnoughBalanceI
     AddressIsWrong, FeeIsBiggerThanAmount, AmountIsInvalid, AddressIsSame, PasswordIsNotAcceptable
 from icx.wallet import Wallet
 
+
 TEST_DIR = os.path.dirname(os.path.abspath("tests/keystore_file/not_a_key_store_file.txt"))
 
 
@@ -36,6 +37,7 @@ class TestTransferValue(unittest.TestCase):
         try:
             # When
             wallet, _ = Wallet.open_keystore_file_of_wallet(keystore_file_path, password)
+
             ret = bool(wallet.transfer_value(
                 password, to_address="hxa974f512a510299b53c55535c105ed962fd01ee2",
                 value="1000000000000000000", fee=10000000000000000))
@@ -246,7 +248,7 @@ class TestTransferValue(unittest.TestCase):
             ret = wallet2.transfer_value(
                 password, to_address="hx66425784bfddb5b430136b38268c3ce1fb68e8c5",
                 value="1000000000000000000", fee=10000000000000000)
-            print(ret.json())
+
         # Then
         except AmountIsInvalid:
             self.assertTrue(False)

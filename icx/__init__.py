@@ -13,4 +13,4 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-__version__ = '0.0.5'
+__version__ = '0.0.6'

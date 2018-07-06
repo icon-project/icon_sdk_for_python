@@ -19,7 +19,7 @@ import json
 from eth_keyfile import create_keyfile_json, decode_keyfile_json
 from icx.custom_error import PasswordIsNotAcceptable, FileExists, NoPermissionToWriteFile, FilePathIsWrong, \
     FilePathWithoutFileName, PasswordIsWrong
-from icx.utils import validate_password, create_jsonrpc_request_content, \
+from utils.icx import validate_password, create_jsonrpc_request_content, \
         store_wallet, validate_key_store_file, read_wallet, \
         get_balance, validate_address, validate_address_is_not_same, check_amount_and_fee_is_valid, make_params, \
         request_generator, get_balance_after_trasfer, check_balance_enough, key_from_key_store, \

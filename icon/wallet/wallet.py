@@ -1,14 +1,14 @@
 from abc import *
 
 # todo: 지원하는 메소드 범위 결정
-# todo: 문서 배포 방식 결정
+# todo: 문서 배포 방식 결정 (readme.md or document)
 # todo: structure 결정
 
 
 class Wallet:
 
     @staticmethod
-    def __generate_the_version_wallet_api(version: str, wallet_info: dict, address: str,
+    def __generate_the_version_wallet_api(version: str, api_uri: str, wallet_info: dict, address: str,
                                           hex_public_key: str) -> object:
         """ Generate a target version wallet api object and return it.
 
@@ -20,26 +20,27 @@ class Wallet:
         """
         _the_version_wallet_api = None  # type: object
         if version == "2.0":
-            _the_version_wallet_api = WalletApiV2(wallet_info, address, hex_public_key)
+            _the_version_wallet_api = WalletApiV2(api_uri, wallet_info, address, hex_public_key)
         elif version == "3.0":
-            _the_version_wallet_api = WalletApiV3(wallet_info, address, hex_public_key)
+            _the_version_wallet_api = WalletApiV3(api_uri, wallet_info, address, hex_public_key)
         return _the_version_wallet_api
 
-    # check point: target uri는 method 호출 시 입력받는다. (지갑 생성 시 입력받지 않는다)
     @classmethod
-    def create_wallet_by_private_key(cls, version: str, hex_private_key: str, password: str):
+    def create_wallet_by_private_key(cls, version: str, api_uri: str, hex_private_key: str, password: str):
         """ Create a wallet object by private key without keystore file.
 
         :param version: a version of wallet api
         :param hex_private_key: a private key in hexadecimals
         :return: an object of the version wallet api
         """
-
         # todo: procedure of create wallet object.
-        return cls.__generate_the_version_wallet_api(version=version, wallet_info="default", address="default", public_key="default")
+        hex_private_key = None
+        hex_private_key = None
+        return cls.__generate_the_version_wallet_api(version=version, api_uri=api_uri, wallet_info="default", address="default",
+                                                     public_key="default")
 
     @classmethod
-    def create_keystore_file_of_wallet(cls, version: str, keystore_file_path: str, keystore_file_password: str):
+    def create_keystore_file_of_wallet(cls, version: str, api_uri: str, keystore_file_path: str, keystore_file_password: str):
         """ Create a wallet object and keystore file on file path.
 
         :param version: a version of wallet api
@@ -50,11 +51,11 @@ class Wallet:
 
         # todo: procedure of create wallet keystore file on the file path.
         # todo: procedure of create wallet object.
-        return cls.__generate_the_version_wallet_api(version=version, wallet_info="default", address="default",
-                                                     public_key="default")
+        return cls.__generate_the_version_wallet_api(version=version, api_uri=api_uri, wallet_info="default",
+                                                     address="default", public_key="default")
 
     @classmethod
-    def open_keystore_file_of_wallet(cls, version: str, keystore_file_path, keystore_file_password):
+    def open_keystore_file_of_wallet(cls, version: str, api_uri: str, keystore_file_path, keystore_file_password):
         """ Open a wallet being on keystore file path and return a wallet object.
 
         :param version: a version of wallet api
@@ -66,16 +67,22 @@ class Wallet:
 
         # todo: procedure of open wallet keystore file on the file path.
         # todo: procedure of create wallet object.
-        return cls.__generate_the_version_wallet_api(version=version, wallet_info="default", address="default", public_key="default")
+        return cls.__generate_the_version_wallet_api(version=version, api_uri=api_uri, wallet_info="default",
+                                                     address="default", public_key="default")
 
 
 class AbstractWalletApi(metaclass=ABCMeta):
     """ Wallet API 메소드를 정의한 부모 클래스 """
 
-    def __init__(self, wallet_info: dict, address: str, hex_public_key: str):
+    def __init__(self, api_uri: str, wallet_info: dict, address: str, hex_public_key: str):
+        self.__api_uri = api_uri    # type: str
         self.__wallet_info = wallet_info    # type: dict
         self.__address = address    # type: str
         self.__public_key = hex_public_key  # type: str
+
+    @property
+    def api_uri(self):
+        return self.__api_uri
 
     @property
     def wallet_info(self):
@@ -95,39 +102,38 @@ class AbstractWalletApi(metaclass=ABCMeta):
     def get_private_key(self, password):
         self.__print_invalid_version()
 
-    def transfer_value_by_private_key(self, hex_private_key: str, to: str, amount: str, fee: str, target_uri: str):
+    def transfer_value_by_private_key(self, hex_private_key: str, to: str, amount: str, fee: str):
         self.__print_invalid_version()
 
-    # naming check point : send_transaction vs transfer_value
-    def transfer_value(self, password: str, to: str, amount: str, fee: str, target_uri: str):
+    def transfer_value(self, password: str, to: str, amount: str, fee: str):
         self.__print_invalid_version()
 
     def get_wallet_info(self):
         self.__print_invalid_version()
 
-    def get_balance(self, target_uri: str):
+    def get_balance(self):
         self.__print_invalid_version()
 
     def get_address(self):
         self.__print_invalid_version()
 
-    def get_block_by_height(self, height: str, target_uri: str):
+    def get_block_by_height(self, height: str):
         self.__print_invalid_version()
 
-    def get_block_by_hash(self, hash: str, target_uri: str):
+    def get_block_by_hash(self, hash: str):
         self.__print_invalid_version()
 
-    def get_last_block(self, target_uri: str):
+    def get_last_block(self):
         self.__print_invalid_version()
 
-    def get_total_supply(self, target_uri: str):
+    def get_total_supply(self):
         self.___print_invalid_verion()
 
-    def get_score_api(self, target_uri: str):
+    def get_score_api(self):
         self.__print_invalid_version()
 
     # check point: icx_call 제공 유무
-    def icx_call(self, target_uri: str):
+    def icx_call(self):
         self.__print_invalid_version()
 
 
@@ -137,29 +143,29 @@ class WalletApiV2(AbstractWalletApi):
     def get_private_key(self, password):
         pass
 
-    def transfer_value_by_private_key(self, hex_private_key: str, to: str, amount: str, fee: str, target_uri: str):
+    def transfer_value_by_private_key(self, hex_private_key: str, to: str, amount: str, fee: str):
         pass
 
-    def transfer_value(self, password: str, to: str, amount: str, fee: str, target_uri: str):
+    def transfer_value(self, password: str, to: str, amount: str, fee: str):
         pass
 
     def get_wallet_info(self):
         print(super().api_uri)
         pass
 
-    def get_balance(self, target_uri: str):
+    def get_balance(self):
         pass
 
     def get_address(self):
         pass
 
-    def get_block_by_height(self, height: str, target_uri: str):
+    def get_block_by_height(self, height: str):
         pass
 
-    def get_block_by_hash(self, hash: str, target_uri: str):
+    def get_block_by_hash(self, hash: str):
         pass
 
-    def get_last_block(self, target_uri: str):
+    def get_last_block(self):
         pass
 
 
@@ -169,46 +175,50 @@ class WalletApiV3(AbstractWalletApi):
     def get_private_key(self, password):
         self.__print_invalid_version()
 
-    def transfer_value_by_private_key(self, hex_private_key: str, to: str, amount: str, fee: str, target_uri: str):
+    def transfer_value_by_private_key(self, hex_private_key: str, to: str, amount: str, fee: str):
         self.__print_invalid_version()
 
-    def transfer_value(self, password: str, to: str, amount: str, fee: str, target_uri: str):
+    def transfer_value(self, password: str, to: str, amount: str, fee: str):
         self.__print_invalid_version()
 
     def get_wallet_info(self):
         self.__print_invalid_version()
 
-    def get_balance(self, target_uri: str):
+    def get_balance(self):
         self.__print_invalid_version()
 
     def get_address(self):
         self.__print_invalid_version()
 
-    def get_block_by_height(self, height: str, target_uri: str):
+    def get_block_by_height(self, height: str):
         self.__print_invalid_version()
 
-    def get_block_by_hash(self, hash: str, target_uri: str):
+    def get_block_by_hash(self, hash: str):
         self.__print_invalid_version()
 
-    def get_last_block(self, target_uri: str):
+    def get_last_block(self):
         self.__print_invalid_version()
 
-    def get_total_supply(self, target_uri: str):
+    def get_total_supply(self):
         self.___print_invalid_verion()
 
-    def get_score_api(self, target_uri: str):
+    def get_score_api(self):
         self.__print_invalid_version()
 
-    def icx_call(self, target_uri: str):
+    def icx_call(self):
         self.__print_invalid_version()
 
-# v2 api instance
-#Wallet2 = Wallet.create_wallet_keystore_file("2", "path", "password")
-#Wallet2.get_wallet_info()
-#Wallet2.icx_call()
+# v2
+from icx.wallet import Wallet
 
-# v3 api instance
-#Wallet3 = Wallet.create_wallet("3.0", "privatekey", "password")
-#Wallet3.get_wallet_info()
+Wallet2 = Wallet.create_wallet_keystore_file("file_path", "password")
+Wallet2.get_wallet_info()
+Wallet2.icx_call()
+
+# v3
+from icon.wallet import Wallet
+
+Wallet3 = Wallet.create_wallet("3.0", "testnet", "private_key", "password")
+Wallet3.get_wallet_info()
 
 

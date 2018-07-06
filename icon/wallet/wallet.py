@@ -35,7 +35,6 @@ class Wallet:
         """
         # todo: procedure of create wallet object.
         hex_private_key = None
-        hex_private_key = None
         return cls.__generate_the_version_wallet_api(version=version, api_uri=api_uri, wallet_info="default", address="default",
                                                      public_key="default")
 

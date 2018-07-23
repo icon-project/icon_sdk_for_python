@@ -59,7 +59,7 @@ class TestCreateWalletByPrivateKey(unittest.TestCase):
 
         # Need to do wait for a while because it takes time to make consensus among nodes.
         # We recommend 0.3 sec at least.
-        time.sleep(1)
+        time.sleep(2)
 
         balance = wallet1.get_balance()
         self.assertIsNot(balance, 0, "Current balance is 0.")

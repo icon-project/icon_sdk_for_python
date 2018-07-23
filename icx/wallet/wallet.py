@@ -16,6 +16,7 @@
 # limitations under the License.
 
 import json
+
 from eth_keyfile import create_keyfile_json, decode_keyfile_json
 from icx.custom_error import PasswordIsNotAcceptable, FileExists, NoPermissionToWriteFile, FilePathIsWrong, \
     FilePathWithoutFileName, PasswordIsWrong
@@ -182,7 +183,7 @@ class Wallet:
 
             # Request the balance repeatedly until we get the response from ICON network.
             request_gen = request_generator(uri)
-            balance = get_balance_after_trasfer(self.address, uri, request_gen)
+            balance = get_balance_after_transfer(self.address, uri, request_gen)
             check_balance_enough(balance, value, fee)
             next(request_gen)
             response = request_gen.send(payload)

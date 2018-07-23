@@ -492,7 +492,7 @@ def read_wallet(file_path):
     return wallet_info
 
 
-def get_balance_after_trasfer(address, uri, request_gen):
+def get_balance_after_transfer(address, uri, request_gen):
     """ Get balance of the address indicated by address for check balance before transfer icx.
 
     :param address: Icx account address starting with 'hx'

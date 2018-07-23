@@ -7,12 +7,11 @@
  - get last block
  
 ### Changed
-N/A
+ - Fix issue: create_wallet_by_private_key() returned the wallet object without the data.
 
 ### Removed
 N/A
 
-# Changelog
 
 ## [0.0.4] - June 12, 2018
 ### Added
@@ -24,7 +23,6 @@ N/A
 ### Removed
 N/A
 
-# Changelog
 
 ## [0.0.3] - April 27, 2018
 ### Added
@@ -37,8 +35,6 @@ N/A
 N/A
 
 
-# Changelog
-
 ## [0.0.2] - April 27, 2018
 ### Added
 N/A
@@ -49,8 +45,6 @@ N/A
 ### Removed
 N/A
 
-
-# Changelog
 
 ## [0.0.1] - April 26, 2018
 ### Added

@@ -1,6 +1,20 @@
 # Changelog
 
-## [0.0.5] - June 12, 2018
+
+## [0.0.6] - July 23, 2018
+### Added
+N/A
+
+### Changed
+ - Fix issue: fixed typo for issue: get_balance_after_transfer().
+              changed -- get_balance_after_trasfer() to --> get_balance_after_transfer()
+ - Increased time for sleep on an unittest from 1 to 2 because it takes time to make consensus among nodes.
+
+### Removed
+N/A
+
+
+## [0.0.5] - June 18, 2018
 ### Added
  - get block by hash
  - get block by height

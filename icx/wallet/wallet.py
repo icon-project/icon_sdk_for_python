@@ -22,7 +22,7 @@ from icx.custom_error import PasswordIsNotAcceptable, FileExists, NoPermissionTo
 from icx.utils import validate_password, create_jsonrpc_request_content, \
         store_wallet, validate_key_store_file, read_wallet, \
         get_balance, validate_address, validate_address_is_not_same, check_amount_and_fee_is_valid, make_params, \
-        request_generator, get_balance_after_trasfer, check_balance_enough, key_from_key_store
+        request_generator, get_balance_after_transfer, check_balance_enough, key_from_key_store
 from icx.signer import IcxSigner
 
 
@@ -181,7 +181,7 @@ class Wallet:
 
             # Request the balance repeatedly until we get the response from ICON network.
             request_gen = request_generator(uri)
-            balance = get_balance_after_trasfer(self.address, uri, request_gen)
+            balance = get_balance_after_transfer(self.address, uri, request_gen)
             check_balance_enough(balance, value, fee)
             next(request_gen)
             response = request_gen.send(payload)

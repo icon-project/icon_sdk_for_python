@@ -1,10 +1,11 @@
 # Changelog
 
-
-## [0.0.5] - June 18, 2018
+## [0.0.5] - June 12, 2018
 ### Added
-N/A
-
+ - get block by hash
+ - get block by height
+ - get last block
+ 
 ### Changed
  - Fix issue: create_wallet_by_private_key() returned the wallet object without the data.
 
@@ -22,7 +23,6 @@ N/A
 ### Removed
 N/A
 
-# Changelog
 
 ## [0.0.3] - April 27, 2018
 ### Added
@@ -35,8 +35,6 @@ N/A
 N/A
 
 
-# Changelog
-
 ## [0.0.2] - April 27, 2018
 ### Added
 N/A
@@ -47,8 +45,6 @@ N/A
 ### Removed
 N/A
 
-
-# Changelog
 
 ## [0.0.1] - April 26, 2018
 ### Added

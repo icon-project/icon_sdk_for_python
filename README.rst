@@ -1,5 +1,5 @@
 ==============================================================================================================================
-This document is for SDK based on ICON RPC **V2**. It doesn't update this page any longer! Please refer to the latest version SDK based on ICON RPC **V3** (https://github.com/icon-project/icon-sdk-python) instead.
+This document is for SDK based on ICON JSON RPC API **V2**. It does not update this page any longer! Please refer to the latest version SDK based on ICON JSON RPC API **V3** (https://github.com/icon-project/icon-sdk-python) instead.
 ==============================================================================================================================
 
 

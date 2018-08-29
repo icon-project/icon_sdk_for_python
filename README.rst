@@ -93,7 +93,7 @@ Getting started
 
 .. code:: bash
 
-    $ pip install iconsdk
+    $ pip install iconsdk==0.0.5
 
 
 Example

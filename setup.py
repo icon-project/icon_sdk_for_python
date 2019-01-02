@@ -20,7 +20,7 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
-requires = ['requests==2.18.4', "eth-keyfile==0.5.0", "secp256k1==0.13.2", "certifi==2018.4.16"]
+requires = ['requests>=2.20.0', "eth-keyfile==0.5.1", "secp256k1==0.13.2", "certifi==2018.4.16"]
 
 setup_options = {
     'name': 'iconsdk', 'version': find_version("icx", "__init__.py"),
